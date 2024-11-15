@@ -11,8 +11,12 @@ function LoginPage() {
         <form>
           <input type="email" placeholder="Email Address" />
           <input type="password" placeholder="Password" />
+          <p className="forgotpassword">
+          <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
           <button type="submit">Log In</button>
         </form>
+        
         <p className="signup-text">
           Don't have an account? <Link to="/signup">Sign Up</Link>
         </p>

@@ -77,16 +77,4 @@ body {
   text-decoration: underline;
 }
 
-.forgot-password {
-  margin-top: 0.5em;
-  color: #7d7d7d;
-}
 
-.forgot-password a {
-  color: #4caf50;
-  text-decoration: none;
-}
-
-.forgot-password a:hover {
-  text-decoration: underline;
-}

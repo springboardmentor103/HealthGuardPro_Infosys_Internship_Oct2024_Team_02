@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 import "../styles/resetpassword.css";
 
 const ResetPassword = () => {
   
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate(); 
   const handleResetPassword = () => {
     if (password.length >= 6 && password === confirmPassword) {
       toast.success("Password reset successful.");
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
     } else if (password !== confirmPassword) {
       toast.error("Passwords do not match.");
     } else {

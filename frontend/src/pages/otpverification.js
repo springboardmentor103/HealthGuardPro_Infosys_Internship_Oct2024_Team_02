@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 import "../styles/otpverification.css";
 
 const OtpVerification = () => {
   const [otp, setOtp] = useState("");
+  const navigate = useNavigate(); 
   const handleVerifyOtp = () => {
     if (otp.length === 6 && /^\d{6}$/.test(otp)) {
       toast.success(`OTP Verified: ${otp}`);
+      setTimeout(() => {
+        navigate('/reset-password');
+      }, 1000);
     } else {
       toast.error("Please enter a valid 6-digit OTP.");
     }

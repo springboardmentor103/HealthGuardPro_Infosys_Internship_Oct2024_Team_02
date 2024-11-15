@@ -16,9 +16,6 @@ function Signup() {
           <input type="password" placeholder="Password" />
           <button type="submit">Sign Up</button>
         </form>
-        <p className="forgot-password">
-          <Link to="/forgot-password">Forgot Password?</Link>
-        </p>
         <p className="signup-text">
           Already have an account? <Link to="/login">Log In</Link>
         </p>
