@@ -48,7 +48,7 @@ const ResetPassword = () => {
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
       <button className="reset-button" onClick={handleResetPassword}>
-        Reset Password
+        Reset
       </button>
     </div>
   );
