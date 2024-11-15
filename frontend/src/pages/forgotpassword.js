@@ -5,17 +5,13 @@ import '../forgotpassword.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-
   const handleInputChange = (e) => {
     setEmail(e.target.value);
   };
-
   const handleResetClick = () => {
     if (email) {
-      // Show success toast
       toast.success(`OTP sent to ${email}`);
     } else {
-      // Show error toast
       toast.error('Please enter a valid email address');
     }
   };
@@ -36,7 +32,6 @@ const ForgotPassword = () => {
       <button className="reset-button" id="reset-button" onClick={handleResetClick}>
         Send OTP
       </button>
-      {/* Toast container to display notifications */}
       <ToastContainer />
     </div>
   );
