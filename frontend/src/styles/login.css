@@ -63,6 +63,25 @@
   .login-box button:hover {
     background-color: #45a049;
   }
+
+  .forgotpassword {
+    text-align: right;
+    margin-right: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+    margin-top: -0.5rem !important;
+    color: #4caf50;
+  }
+  
+  .forgotpassword a {
+    font-size: 0.9rem;
+    color: #4caf50;
+    text-decoration: none;
+  }
+
+  .forgotpassword a:hover {
+    text-decoration: underline;
+  }
+
   
   .signup-text {
     margin-top: 1em;
