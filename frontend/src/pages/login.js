@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/login.css';
 
 function LoginPage() {
@@ -10,10 +11,14 @@ function LoginPage() {
         <form>
           <input type="email" placeholder="Email Address" />
           <input type="password" placeholder="Password" />
+          <p className="forgotpassword">
+          <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
           <button type="submit">Log In</button>
         </form>
+        
         <p className="signup-text">
-          Don't have an account? <a href="/signup">Sign Up</a>
+          Don't have an account? <Link to="/signup">Sign Up</Link>
         </p>
       </div>
     </div>
