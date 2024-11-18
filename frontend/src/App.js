@@ -5,6 +5,7 @@ import SignupPage from './pages/signup';
 import ForgotPassword from "./pages/forgotpassword";
 import OtpVerification from "./pages/otpverification";
 import ResetPassword from "./pages/resetpassword";
+import QuizPage from './pages/quiz';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/quiz" element={<QuizPage />} />
           <Route path="*" element={<LoginPage />} />
         </Routes>
       </div>
