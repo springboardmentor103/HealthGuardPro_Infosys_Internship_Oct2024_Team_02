@@ -13,14 +13,15 @@ const ForgotPassword = () => {
   };
 
   const handleResetClick = () => {
-    if (email) {
-      toast.success(`OTP sent to ${email}`);
-      setTimeout(() => {
-        navigate('/otp-verification');
-      }, 1000); 
-    } else {
+    if (!email.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
       toast.error('Please enter a valid email address');
+      return;
     }
+    
+    toast.success(`OTP sent to ${email}`);
+    setTimeout(() => {
+      navigate('/otp-verification');
+    }, 1000); 
   };
 
   return (
@@ -35,6 +36,7 @@ const ForgotPassword = () => {
         placeholder="Email Address"
         value={email}
         onChange={handleInputChange}
+        autoFocus
       />
       <button className="reset-button" id="reset-button" onClick={handleResetClick}>
         Send OTP
