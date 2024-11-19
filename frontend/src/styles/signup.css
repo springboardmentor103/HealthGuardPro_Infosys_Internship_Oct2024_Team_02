@@ -47,6 +47,29 @@ body {
   border: 1px solid #ddd;
   border-radius: 10px;
   font-size: 1em;
+  transition: all 0.3s ease;
+}
+
+.login-box input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.login-box input[type="password"] {
+  padding: 0.75em;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  background-color: #fff;
+  width: 100%;
+}
+
+.login-box input[type="password"]:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
 .login-box button {
@@ -57,10 +80,13 @@ body {
   border-radius: 10px;
   font-size: 1em;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .login-box button:hover {
   background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
 .signup-text {
@@ -77,4 +103,19 @@ body {
   text-decoration: underline;
 }
 
+.password-strength {
+  font-size: 12px;
+  margin-top: 4px;
+  text-align: left;
+  padding-left: 4px;
+  min-height: 20px;
+}
 
+.password-strength.weak { color: #ff4444; }
+.password-strength.medium { color: #ffbb33; }
+.password-strength.strong { color: #00C851; }
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
