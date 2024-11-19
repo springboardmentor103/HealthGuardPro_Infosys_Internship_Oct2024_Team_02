@@ -49,6 +49,12 @@
     border-radius: 8px;
     font-size: 1em;
   }
+
+  .login-box input:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  }
   
   .login-box button {
     padding: 0.75em;
@@ -97,3 +103,8 @@
     text-decoration: underline;
   }
   
+  
+  button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
