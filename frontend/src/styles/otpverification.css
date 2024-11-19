@@ -56,6 +56,53 @@ body,html {
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
+.otp-input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.otp-input-box {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  transition: all 0.2s ease;
+  outline: none; /* Add this to remove default focus outline */
+}
+
+.otp-input-box:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  background-color: #e8f5e9; /* Change to green background on focus */
+}
+
+.otp-input-box.filled {
+  background-color: #e8f5e9;
+  border-color: #4caf50;
+}
+
+.otp-input-box.error {
+  border-color: #ff4444;
+  background-color: #ffe7e7;
+  animation: errorShake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  background-color: #fff0f0;
+  border-color: #ff4444;
+  color: #ff4444;
+}
+
+/* The animation will apply sequentially to each input box */
+.otp-input-box.error:nth-child(1) { animation-delay: 0s; }
+.otp-input-box.error:nth-child(2) { animation-delay: 0.1s; }
+.otp-input-box.error:nth-child(3) { animation-delay: 0.2s; }
+.otp-input-box.error:nth-child(4) { animation-delay: 0.3s; }
+.otp-input-box.error:nth-child(5) { animation-delay: 0.4s; }
+.otp-input-box.error:nth-child(6) { animation-delay: 0.5s; }
+
 .verify-button {
   padding: 10px 90px;
   font-size: 16px;
@@ -91,7 +138,6 @@ button:disabled {
   color: #666;
 }
 
-
 .resend-button {
   margin-top: 10px;
   font-size: 14px;
@@ -104,4 +150,28 @@ button:disabled {
 .resend-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+@keyframes errorShake {
+  0% {
+    transform: translateX(0);
+    box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(-5px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(-5px);
+    box-shadow: 0 0 20px 0 rgba(255, 68, 68, 0.5);
+  }
+  100% {
+    transform: translateX(0);
+    box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
+  }
 }
