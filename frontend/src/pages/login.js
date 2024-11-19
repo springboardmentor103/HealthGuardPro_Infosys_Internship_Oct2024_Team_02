@@ -6,6 +6,8 @@ import '../styles/login.css';
 
 function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const passwordInputRef = useRef(null);
 
   const handleEmailKeyDown = (e) => {
@@ -24,6 +26,12 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
     setIsLoading(true);
     try {
       // Add your login logic here
@@ -42,8 +50,22 @@ function LoginPage() {
         <h1>Welcome to <span>HealthGuard Pro</span></h1>
         <p>Log In to get started</p>
         <form onSubmit={handleSubmit}>
-          <input type="email" placeholder="Email Address" autoFocus onKeyDown={handleEmailKeyDown} />
-          <input type="password" placeholder="Password" ref={passwordInputRef} onKeyDown={handlePasswordKeyDown} />
+          <input 
+            type="email" 
+            placeholder="Email Address" 
+            autoFocus 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={handleEmailKeyDown} 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            ref={passwordInputRef}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handlePasswordKeyDown} 
+          />
           <p className="forgotpassword">
           <Link to="/forgot-password">Forgot Password?</Link>
           </p>
