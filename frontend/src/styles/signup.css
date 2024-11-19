@@ -47,6 +47,7 @@ body {
   border: 1px solid #ddd;
   border-radius: 10px;
   font-size: 1em;
+  transition: all 0.3s ease;
 }
 
 .login-box input:focus {
@@ -60,7 +61,7 @@ body {
   border: 1px solid #ddd;
   border-radius: 10px;
   font-size: 1em;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
   background-color: #fff;
   width: 100%;
 }
@@ -79,10 +80,13 @@ body {
   border-radius: 10px;
   font-size: 1em;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .login-box button:hover {
   background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
 .signup-text {

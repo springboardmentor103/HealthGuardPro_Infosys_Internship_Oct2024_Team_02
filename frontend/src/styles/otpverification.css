@@ -49,6 +49,7 @@ body,html {
   outline: none;
   margin-bottom: 15px;
   background-color: #f5f5f5;
+  transition: all 0.3s ease;
 }
 
 .otp-input:focus {
@@ -73,6 +74,7 @@ body,html {
   background-color: #f5f5f5;
   transition: all 0.2s ease;
   outline: none; /* Add this to remove default focus outline */
+  transition: all 0.3s ease;
 }
 
 .otp-input-box:focus {
@@ -112,10 +114,13 @@ body,html {
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .verify-button:hover {
   background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
 .password-strength {
@@ -136,15 +141,15 @@ button:disabled {
   margin-top: 10px;
   font-size: 14px;
   color: #666;
-}
-
-.resend-button {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #666;
   background: none;
   border: none;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.resend-button:hover:not(:disabled) {
+  color: #4caf50;
+  transform: translateY(-1px);
 }
 
 .resend-button:disabled {
