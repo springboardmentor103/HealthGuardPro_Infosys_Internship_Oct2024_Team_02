@@ -7,7 +7,7 @@
 
 /* Title */
 .title {
-    color: #1B281B;
+    color: #4CAF50;
     text-align: left;
     font-family: Arial;
     font-size: 30px;
@@ -71,7 +71,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    border: 1.5px solid rgba(73, 110, 75, 0.20);
+    border: 2px solid rgba(73, 110, 75, 0.20);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     width: 100%; /* Make button width responsive */

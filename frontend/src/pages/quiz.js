@@ -82,10 +82,10 @@ function QuizPage() {
       </div>
       {/* Adjust the button text */}
       <button className="submit-button" onClick={incrementIndex}>
-        {index + 1 === data.length ? 'Submit' : 'Next'}
+        {index + 1 === data.length ? 'SUBMIT' : 'NEXT'}
       </button>
-      {/* Skip functionality */}
-      <p className="skip-link" onClick={incrementIndex}>Skip</p>
+      
+    
     </div>
   </div>
   );
