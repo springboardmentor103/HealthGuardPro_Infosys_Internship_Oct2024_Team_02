@@ -1,0 +1,187 @@
+/* Title Space */
+.title-space {
+    flex-shrink: 0;
+    align-self: stretch;
+    padding-top: 56px;
+}
+
+/* Title */
+.title {
+    color: #4CAF50;
+    text-align: left;
+    font-family: Arial;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 51px;
+    letter-spacing: -0.9px;
+    padding-left: 30px;
+}
+
+/* Card Box */
+.box-crt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 0 20px 120px;
+    align-self: stretch;
+    max-width: 1200px;
+    margin: 0 auto; /* Center the card */
+}
+
+.box-sizing{
+    height: 5vh;
+}
+
+/* Subtitle */
+.subtitle {
+    color: #1B281B;
+    text-align: center;
+    font-family: Arial;
+    font-size: 45px;
+    font-weight: 400;
+    line-height: 68px;
+}
+
+/* Question Text */
+.question-text {
+    color: #1B281B;
+    text-align: center;
+    font-family: Arial;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 32px;
+}
+
+/* Options */
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    
+}
+
+/* Option Button */
+.option-button {
+    display: flex;
+    padding: 12px 24px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: 2px solid rgba(73, 110, 75, 0.20);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%; /* Make button width responsive */
+    max-width: 250px; /* Limit the width */
+    background-color: white;
+}
+
+/* Submit Button */
+.submit-button {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    height: 44px;
+    padding: 12px 24px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Skip Link */
+.skip-link {
+    color: #449C47;
+    font-family: Arial;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+/* Correct & Wrong Answers */
+
+
+
+.option-button.selected {
+    background-color: #4CAF50;
+    color: rgb(0, 0, 0);
+    border: black 2px solid;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    .title {
+        font-size: 28px; /* Smaller title font size */
+        padding-left: 10px;
+    }
+
+    .subtitle {
+        font-size: 32px; /* Smaller subtitle font size */
+    }
+
+    .question-text {
+        font-size: 20px; /* Smaller question font size */
+    }
+
+    .options {
+        gap: 8px; /* Reduced gap between option buttons */
+    }
+
+    .option-button {
+        padding: 10px 20px; /* Smaller padding for option buttons */
+        width: 100%; /* Ensure buttons take full width */
+        max-width: 100%; /* Buttons take up the full available width */
+    }
+
+    .submit-button {
+        max-width: 90%; /* Limit the width of submit button */
+    }
+
+    .skip-link {
+        font-size: 14px; /* Smaller font size for skip link */
+    }
+    .box-sizing{
+        height: 0.5vh;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 24px; /* Even smaller title font size */
+        padding-left: 10px;
+    }
+
+    .subtitle {
+        font-size: 28px; /* Smaller subtitle font size */
+    }
+
+    .question-text {
+        font-size: 18px; /* Smaller question font size */
+    }
+
+    .options {
+        gap: 8px;
+        flex-direction: column; /* Stack options vertically on small screens */
+    }
+
+    .option-button {
+        padding: 8px 16px; /* Further reduce padding on small screens */
+        width: 100%; /* Full width buttons */
+    }
+
+    .submit-button {
+        width: 100%; /* Make the submit button fill the container */
+    }
+    .box-sizing{
+        height: 0.5vh;
+    }
+}
