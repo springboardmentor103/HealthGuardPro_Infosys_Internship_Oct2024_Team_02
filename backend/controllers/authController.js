@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
+const bcrypt = require('bcryptjs');
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -47,5 +48,33 @@ const loginUser = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  const { email, newPassword } = req.body;
 
-module.exports = { registerUser, loginUser };
+  if (!email || !newPassword) {
+    return res.status(400).json({ message: 'Email and new password are required' });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update the password without triggering the pre-save middleware
+    await User.updateOne({ email }, { password: hashedPassword });
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update password', error: error.message });
+  }
+};
+
+
+module.exports = { registerUser, loginUser, changePassword  };
