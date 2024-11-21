@@ -111,7 +111,7 @@ body,html {
   color: white;
   background-color: #4caf50;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   transition: all 0.3s ease;
