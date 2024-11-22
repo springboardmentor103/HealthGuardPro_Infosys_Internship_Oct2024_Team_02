@@ -2,7 +2,7 @@
 .title-space {
     flex-shrink: 0;
     align-self: stretch;
-    padding-top: 56px;
+    padding-top: 35px;
 }
 
 /* Title */
@@ -120,7 +120,7 @@
 @media (max-width: 768px) {
     .title {
         font-size: 28px; /* Smaller title font size */
-        padding-left: 10px;
+        text-align: center;
     }
 
     .subtitle {
@@ -156,7 +156,7 @@
 
 @media (max-width: 480px) {
     .title {
-        font-size: 24px; /* Even smaller title font size */
+        font-size: 38px; /* Even smaller title font size */
         padding-left: 10px;
     }
 

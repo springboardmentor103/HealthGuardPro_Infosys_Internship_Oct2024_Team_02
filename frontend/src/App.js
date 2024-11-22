@@ -7,6 +7,7 @@ import OtpVerification from "./pages/otpverification";
 import ResetPassword from "./pages/resetpassword";
 import QuizPage from './pages/quiz';
 import './App.css';
+import Leaderboard from './pages/leaderboard';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/quiz" element={<QuizPage />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="*" element={<LoginPage />} />
         </Routes>
       </div>
