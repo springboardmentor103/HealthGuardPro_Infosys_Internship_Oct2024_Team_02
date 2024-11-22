@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/login.css';
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,6 +38,7 @@ function LoginPage() {
       // Add your login logic here
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       toast.success('Login successful!');
+      navigate('/dashboard'); // Navigate to dashboard after successful login
     } catch (error) {
       toast.error('Invalid credentials');
     } finally {
