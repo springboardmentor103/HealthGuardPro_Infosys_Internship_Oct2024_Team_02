@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { data } from '../data/data.js';
+import { data } from '../data/biodata.js';
 import '../styles/quiz.css';
 
-function QuizPage() {
+function BiomarkerQuizPage() {
   const categories = Object.keys(data);
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [index, setIndex] = useState(0);
@@ -93,4 +93,4 @@ function QuizPage() {
   );
 }
 
-export default QuizPage;
+export default BiomarkerQuizPage;

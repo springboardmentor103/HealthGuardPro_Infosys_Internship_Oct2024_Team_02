@@ -1,187 +1,173 @@
-/* Title Space */
 .title-space {
     flex-shrink: 0;
     align-self: stretch;
-    padding-top: 35px;
+    padding-top: 20px;
 }
 
-/* Title */
 .title {
-    color: #4CAF50;
+    color: black;
     text-align: left;
-    font-family: Arial;
-    font-size: 30px;
+    font-family: Arial, sans-serif;
+    font-size: 35px;
     font-weight: 700;
-    line-height: 51px;
-    letter-spacing: -0.9px;
-    padding-left: 30px;
+    line-height: 1.5;
+    letter-spacing: -1.9px;
+    padding-left: 20px;
 }
 
-/* Card Box */
+.title:hover {
+    color: #4caf50;
+    cursor: pointer;
+}
+
 .box-crt {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 32px;
-    padding: 0 20px 120px;
+    gap: 24px;
+    padding: 20px 20px 80px;
     align-self: stretch;
-    max-width: 1200px;
-    margin: 0 auto; /* Center the card */
+    max-width: 100%;
+    margin: 0 auto;
 }
 
-.box-sizing{
-    height: 5vh;
-}
-
-/* Subtitle */
 .subtitle {
     color: #1B281B;
     text-align: center;
-    font-family: Arial;
-    font-size: 45px;
-    font-weight: 400;
-    line-height: 68px;
+    font-family: Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 30px 10px;
 }
 
-/* Question Text */
 .question-text {
     color: #1B281B;
     text-align: center;
-    font-family: Arial;
-    font-size: 28px;
+    font-family: Arial, sans-serif;
+    font-size: 25px;
     font-weight: 400;
-    line-height: 32px;
+    line-height: 1.5;
+    margin: 10px 0;
 }
 
-/* Options */
 .options {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     width: 100%;
-    
+    max-width: 100%;
 }
 
-/* Option Button */
 .option-button {
     display: flex;
-    padding: 12px 24px;
+    font-size: 16px;
+    padding: 10px 16px;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
     border: 2px solid rgba(73, 110, 75, 0.20);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    width: 100%; /* Make button width responsive */
-    max-width: 250px; /* Limit the width */
+    width: 100%;
+    max-width: 200px;
     background-color: white;
 }
 
-/* Submit Button */
 .submit-button {
+    font-size: 15px;
     display: flex;
     width: 100%;
-    max-width: 400px;
+    max-width: 350px;
     height: 44px;
     padding: 12px 24px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
     border-radius: 10px;
-    background: #4CAF50;
+    background: #45a049;
     border: none;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-/* Skip Link */
 .skip-link {
-    color: #449C47;
-    font-family: Arial;
-    font-size: 15px;
+    color: #45a049;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
     font-weight: 400;
     line-height: 20px;
 }
 
-/* Correct & Wrong Answers */
-
-
-
 .option-button.selected {
     background-color: #4CAF50;
-    color: rgb(0, 0, 0);
-    border: black 2px solid;
+    color: black;
+    border: 2px solid black;
 }
 
-/* Media Queries for responsiveness */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
 @media (max-width: 768px) {
     .title {
-        font-size: 28px; /* Smaller title font size */
+        font-size: 24px;
         text-align: center;
-    }
-
-    .subtitle {
-        font-size: 32px; /* Smaller subtitle font size */
-    }
-
-    .question-text {
-        font-size: 20px; /* Smaller question font size */
-    }
-
-    .options {
-        gap: 8px; /* Reduced gap between option buttons */
-    }
-
-    .option-button {
-        padding: 10px 20px; /* Smaller padding for option buttons */
-        width: 100%; /* Ensure buttons take full width */
-        max-width: 100%; /* Buttons take up the full available width */
-    }
-
-    .submit-button {
-        max-width: 90%; /* Limit the width of submit button */
-    }
-
-    .skip-link {
-        font-size: 14px; /* Smaller font size for skip link */
-    }
-    .box-sizing{
-        height: 0.5vh;
-    }
-
-}
-
-@media (max-width: 480px) {
-    .title {
-        font-size: 38px; /* Even smaller title font size */
         padding-left: 10px;
     }
 
     .subtitle {
-        font-size: 28px; /* Smaller subtitle font size */
+        font-size: 24px;
     }
 
     .question-text {
-        font-size: 18px; /* Smaller question font size */
+        font-size: 18px;
     }
 
     .options {
         gap: 8px;
-        flex-direction: column; /* Stack options vertically on small screens */
     }
 
     .option-button {
-        padding: 8px 16px; /* Further reduce padding on small screens */
-        width: 100%; /* Full width buttons */
+        padding: 8px 14px;
+        max-width: 100%;
     }
 
     .submit-button {
-        width: 100%; /* Make the submit button fill the container */
+        max-width: 100%;
     }
-    .box-sizing{
-        height: 0.5vh;
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 20px;
+        padding-left: 5px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+    }
+
+    .question-text {
+        font-size: 16px;
+    }
+
+    .options {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .option-button {
+        padding: 6px 12px;
+    }
+
+    .submit-button {
+        width: 100%;
     }
 }

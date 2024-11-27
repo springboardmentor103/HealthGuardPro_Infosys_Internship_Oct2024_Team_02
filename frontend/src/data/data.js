@@ -1,4 +1,6 @@
-export const data = [
+export const data = {
+  PhysicalFitness: [
+    
     {
       id: 1,
       question: "Which of the following is a primary component of physical fitness?",
@@ -103,11 +105,13 @@ export const data = [
       question: "What is the benefit of a high-fiber diet?",
       options: [
         { text: "Improves digestion", score: 10 },
-        { text: "Increases muscle mass", score: 9 },
+        { text: "Increases muscle", score: 9 },
         { text: "Strengthens bones", score: 8 },
         { text: "Enhances flexibility", score: 7 },
       ],
       answer: "Improves digestion",
     },
-  ];
-  
+    
+  ],
+ 
+};
