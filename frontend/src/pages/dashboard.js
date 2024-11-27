@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { Link } from 'react-router-dom';
 import "../styles/dashboard.css";
+import "../styles/leaderboard.css"
 
 const Dashboard = () => {
     const defaultImage =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLdIEENaWqGZV9kxR871g9p6ywGNnqvbyd3z-3MoYMi-Fc6WZvtU7wE68_RHCBINkRjl4&usqp=CAU";
+    "https://s3-alpha-sig.figma.com/img/c0e7/2200/9b7eed5a0b793d813121bca45fc43ee2?Expires=1733097600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=OwfOV0P~uf4ij8la9d04ln9gQbHZhqWiw0bPdEylOtCxHJE7EiqATTtdo0jj2oVNi1mOkipbYuqad6eYh3n3sKZkiV0iK5pX3tgKM7jkT81zI9qUJxWuFYZ7AyDBLRUfwynyLx9CI5UDZQhBS8D13bko1j-Gw2BPi8dkWhD48a7cG7IWpsVYihMSkPSXbOveXLOQ4VOnYymKQDayjr7s1CAyzXqM5qxcSXzPm1CNa1jpfDAsyuWfJixAaXCh6XL8cV3tjoAqX15z~5jskduSo5n6K1F0AKlndo4f7cqaaAotBFjnLo9LTEZc~xTBbsCCURT7oE2VnOkOKWKOIuwK4Q__";
   
   const [profileImage, setProfileImage] = useState(defaultImage);
   const [showOptions, setShowOptions] = useState(false); 
+
+  // const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Function to toggle the menu open/close
+  const toggleMenu = () => {
+    setIsMenuOpen((prevState) => !prevState); // Toggle the state
+  };
+
+  // to close ham
+  
+
   const data = [
     { title: "Physical Fitness", score: "95%", description: "Overall Score" },
     { title: "Nutrition", score: "95%", description: "Overall Score" },
@@ -65,6 +77,10 @@ const Dashboard = () => {
     }
   };
   
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeMenu = () => setIsMenuOpen(false); 
+  // const toggleMenu = () => setIsMenuOpen((prevState) => !prevState);
   
   const handleDeleteImage = () => {
     setProfileImage(defaultImage); 
@@ -75,7 +91,7 @@ const Dashboard = () => {
     toast(
       (t) => (
         <div className="toast-popup">
-          <p>Are you sure you want to logout?</p>
+          <p>Are you sure you want to logout ?</p>
           <div className="toast-popup-buttons">
             <button
               className="confirm-button"
@@ -84,7 +100,7 @@ const Dashboard = () => {
                   
               }}
             >
-              Confirm
+              <Link to="/login">Confirm</Link>
             </button>
             <button
               className="cancel-button"
@@ -104,16 +120,20 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
+      {/*  
       <nav className="navbar">
         <div className="logo">
           <a href="/">HealthGuard Pro</a>
         </div>
+        <div className='close-nav'>
+        <div className={`app-container ${isMenuOpen ? "menu-open" : ""}`}>
         <ul className="nav-links">
           <li>
             <a href="/">Take Test</a>
           </li>
           <li>
-            <a href="/">Leaderboard</a>
+          <Link to="/leaderboard">Leaderboard</Link>
+            
           </li>
           <li>
             <div className="parent-container">
@@ -121,8 +141,45 @@ const Dashboard = () => {
             </div>
           </li>
         </ul>
-      </nav>
+        </div>
+        <div className="hamburger" onClick={toggleMenu}>
+        {isMenuOpen ? "✖" : "☰"}
+      </div>
+      </div>
       
+      </nav>
+   */}
+
+<header className="header-lead">
+        <h1 className="logo">HealthGuard Pro</h1>
+        <nav>
+          {/* Hamburger Icon for Mobile */}
+          <div className="hamburger" onClick={toggleMenu}>
+            <svg clip-rule="evenodd"   width="25" height="25"  fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21 15.75c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75z" fill-rule="nonzero"/></svg>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+
+          {/* Navbar Menu */}
+          <div className={`navbar-menu ${isMenuOpen ? "active" : ""}`}>
+          <button className="close-ham" onClick={closeMenu} ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
+            </button>
+            <button className="navbar-button"><Link to="/quiz">Take Test</Link></button>
+            <button className="navbar-button"><Link to="/leaderboard">Leaderboard</Link></button>
+            <button className="navbar-button logout-button" onClick={handleLogout}>LogOut</button>
+          </div>
+        </nav>
+      </header>
+
+
+
+
+
+
+
+
       <div className="profile-section">
         <div className="profile-container">
           <div

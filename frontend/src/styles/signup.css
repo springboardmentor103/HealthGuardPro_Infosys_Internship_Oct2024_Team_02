@@ -19,6 +19,9 @@ body {
 
 .login-box {
   text-align: center;
+  width: 100%;
+  max-width: 600px; /* Desktop layout remains the same */
+  padding: 2rem;
 }
 
 .login-box h1 {
@@ -116,9 +119,11 @@ body {
 .password-strength.weak {
   color: #ff4444;
 }
+
 .password-strength.medium {
   color: #ffbb33;
 }
+
 .password-strength.strong {
   color: #00c851;
 }
@@ -126,4 +131,90 @@ body {
 button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+
+@media (max-width: 3000px) {
+  .login-box {
+    width: 100%;  
+    padding: 1.5rem; 
+  }
+  
+
+  .login-box h1 {
+    font-size: 1.8em;  
+  }
+
+  .login-box input,
+  .login-box button {
+    font-size: 0.9em;  
+
+  .login-box button {
+    padding: 10px 20px; 
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .login-box {
+    width: 90%;  /* Keep it 90% width of screen on mobile */
+    padding: 1.5rem;  /* Reduce padding on smaller screens */
+  }
+
+  .login-box h1 {
+    font-size: 1.8em;  /* Slightly reduce the heading font size */
+  }
+
+  .login-box input,
+  .login-box button {
+    font-size: 0.9em;  /* Reduce font size for inputs and buttons */
+  }
+
+  .login-box button {
+    padding: 10px 20px;  /* Adjust padding for button */
+  }
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    width: 90%;  /* Width of login box for very small screens */
+    padding: 1rem;  /* Further reduce padding */
+  }
+
+  .login-box h1 {
+    font-size: 1.5em;  /* Further reduce the heading size for very small screens */
+  }
+
+  .login-box input,
+  .login-box button {
+    font-size: 0.8em;  /* Further adjust font size */
+  }
+
+  .login-box button {
+    padding: 10px 15px;  /* Further reduce padding of button */
+  }
+
+  .signup-text {
+    font-size: 0.8em;  /* Reduce font size for signup text */
+  }
+}
 }

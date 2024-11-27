@@ -13,7 +13,7 @@ body {
 }
 
 /* Header */
-.header {
+.header-lead {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,13 +28,13 @@ body {
   flex-shrink: 0; /* Prevents shrinking on small screens */
 }
 
-.nav-menu {
+.navbar-menu {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap; /* Adjusts menu items to new lines if needed */
 }
 
-.nav-button {
+.navbar-button {
   background: none;
   font-size: 1.3rem;
   padding: 0.5rem 1rem;
@@ -53,11 +53,10 @@ body {
   color: white;
   border: 2px solid white;
   border-radius: 25px;
+  width: 155px;
 }
 
-.logout-button:hover {
-  background: #45a049;
-}
+
 
 /* Hamburger Icon for Mobile */
 .hamburger {
@@ -79,11 +78,11 @@ body {
 }
 
 /* Navbar Menu for Mobile */
-.nav-menu {
+.navbar-menu {
   display: flex;
 }
 
-.nav-menu.active {
+.navbar-menu.active {
   flex-direction: column;
   gap: 10px;
   padding: 10px;
@@ -146,13 +145,14 @@ a {
 .list-item {
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
+  font: 45px;
+
   padding: 1rem 0;
 }
 
 .user-info {
   display: flex;
-  /* align-items: center; */
+ 
 }
 
 .list-profile-image {
@@ -171,6 +171,27 @@ a {
   color: #4caf50;
 }
 
+
+.logout-button {
+  
+  width: 185px;
+  height: 45px;
+ 
+}
+.list-name{
+  font-size: 40px;
+}
+
+.green-box{
+  background-color: #4caf50;
+  width: 42px;
+  height: 42px;
+display: inline-block;
+  border-radius: 12px;
+}
+
+
+
 /* Blur Overlay */
 .blur-overlay {
   position: absolute;
@@ -188,7 +209,7 @@ a {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .header {
+  .header-lead {
     flex-direction: row;
     padding: 1rem;
     gap: 1rem;
@@ -204,6 +225,14 @@ a {
   cursor: pointer;
 
     
+  }
+  .green-box{
+    
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+  
+   
   }
 
   .close-ham{
@@ -223,9 +252,9 @@ a {
   .background-image {
     border-radius:18px;
   }
- 
+  
 
-  .nav-menu {
+  .navbar-menu {
     position: fixed;
   top: 0;
   right: 0;
@@ -238,7 +267,7 @@ a {
   overflow-y: auto; /* Prevent overflow issues */
   }
 
-  .nav-menu.active {
+  .navbar-menu.active {
     transform: translateX(0);
   }
   .close-ham.on{
@@ -254,14 +283,22 @@ a {
   .leaderboard-list {
     width: 90%;
   }
-
+ 
   .list-header,
-  .list-item {
+  .list-item  {
     display: flex;
   justify-content: space-between;
   padding: 1rem 0;
   
   }
+  .list-name {
+    font-size: 30px;
+  
+  }
+  .list-header{
+    gap: 10px;
+  }
+
 
   .user-info {
     font-size: 1rem;
@@ -276,10 +313,11 @@ a {
   .list-profile-image {
     margin-bottom: 0.5rem;
   }
+  
 }
 
 @media (max-width: 480px) {
-  .header {
+  .header-lead {
     padding: 1rem;
   }
 
@@ -287,7 +325,7 @@ a {
     font-size: 1.5rem;
   }
 
-  .nav-button {
+  .navbar-button {
     font-size: 1rem;
     padding: 0.5rem;
   }
@@ -297,17 +335,104 @@ a {
     height: 80px;
   }
   .user-rank {
-    font-size: 1.3rem;
+    font-size: 1rem;
     color: #4caf50;
   }
   .user-name {
     padding-top: 15px;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .user-info {
     text-align: center;
     
   }
+  .list-name{
+    font-size: 18px;
+  }
+  .green-box{
+    
+    width: 15px;
+    height: 15px;
+    border-radius: 5px;
   
+   
+  }
+  
+}
+@media ( max-width: 944px) {
+  @media (min-width: 768) {
+    .header-lead {
+      flex-direction: row;
+      padding: 1rem;
+      gap: 1rem;
+    }
+  
+    .hamburger {
+      display: flex;
+      flex-direction: col;
+      justify-content: space-around;
+    align-items: center;
+    width: 130px;
+    height: 130px;
+    cursor: pointer;
+  
+      
+    }
+
+  
+    .close-ham{
+      display: flex;
+      color: red;
+      background: transparent;
+      border: 1px solid white;
+      padding: 8px;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+  
+      border-radius: 10px;
+     
+    }
+    .background-image {
+      border-radius:18px;
+    }
+    
+  
+    .navbar-menu {
+      position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: #fff;
+    transform: translateX(100%);
+   
+    z-index: 9999; /* Ensure the menu stays on top */
+    overflow-y: auto; /* Prevent overflow issues */
+    }
+  
+    .navbar-menu.active {
+      transform: translateX(0);
+    }
+    .close-ham.on{
+      transform: translate(80%);
+  
+    }
+  .logout-button{
+      width: 20px;
+      height: 20px;
+    }
+  
+  
+    
+  }
+
+}
+
+
+.navbar-button:hover{
+ background: transparent;
+ color: #4caf50;
 }
