@@ -109,9 +109,7 @@ const Dashboard = () => {
           <a href="/">HealthGuard Pro</a>
         </div>
         <ul className="nav-links">
-          <li>
-            <a href="/">Take Test</a>
-          </li>
+          
           <li>
             <a href="/">Leaderboard</a>
           </li>
