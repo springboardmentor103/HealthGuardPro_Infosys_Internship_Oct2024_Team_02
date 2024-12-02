@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import "../styles/dashboard.css";
+// import { Navigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const defaultImage =
@@ -13,6 +15,8 @@ const Dashboard = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [loading, setLoading] = useState(false); 
 
+  const [showOptions, setShowOptions] = useState(false); 
+  const navigate = useNavigate();
   const data = [
     { title: "Physical Fitness", score: "95%", description: "Overall Score", route: "/physical-fitness" },
     { title: "Nutrition", score: "95%", description: "Overall Score", route: "/nutrition" },
@@ -69,6 +73,9 @@ const Dashboard = () => {
               onClick={() => {
                 toast.dismiss(t.id);
                 
+                toast.dismiss(t.id); 
+                navigate('/');
+                  
               }}
             >
               Confirm
@@ -117,11 +124,11 @@ const Dashboard = () => {
 
       <nav className="navbar">
         <div className="logo">
-          <a href="/">HealthGuard Pro</a>
+          <a href="/dashboard">HealthGuard Pro</a>
         </div>
         <ul className="nav-links">
           <li>
-            <a href="/">Leaderboard</a>
+            <a href="/leaderboard">Leaderboard</a>
           </li>
           <li>
             <div className="parent-container">
