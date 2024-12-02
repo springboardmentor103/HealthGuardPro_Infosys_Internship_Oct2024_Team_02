@@ -1,36 +1,25 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import 'react-toastify/dist/ReactToastify.css';
-
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
-    const defaultImage =
+  const defaultImage =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLdIEENaWqGZV9kxR871g9p6ywGNnqvbyd3z-3MoYMi-Fc6WZvtU7wE68_RHCBINkRjl4&usqp=CAU";
-  
+
   const [profileImage, setProfileImage] = useState(defaultImage);
-  const [showOptions, setShowOptions] = useState(false); 
+  const [showOptions, setShowOptions] = useState(false);
+  const [loading, setLoading] = useState(false); 
+
   const data = [
-    { title: "Physical Fitness", score: "95%", description: "Overall Score" },
-    { title: "Nutrition", score: "95%", description: "Overall Score" },
-    {
-      title: "Mental Well-Being",
-      score: "95%",
-      description: "Last week avg scoring",
-    },
-    { title: "Lifestyle", score: "95%", description: "Last week avg scoring" },
-    {
-      title: "Bio Markers",
-      score: "95%",
-      description: "Last week avg scoring",
-      isBottom: true,
-    },
-    {
-      title: "Overall Score",
-      score: "75%",
-      description: "Overall Score",
-      isBottom: true,
-    },
+    { title: "Physical Fitness", score: "95%", description: "Overall Score", route: "/physical-fitness" },
+    { title: "Nutrition", score: "95%", description: "Overall Score", route: "/nutrition" },
+    { title: "Mental Well-Being", score: "95%", description: "Last week avg scoring", route: "/mental-wellness" },
+    { title: "Lifestyle", score: "95%", description: "Last week avg scoring", route: "/lifestyle" },
+    { title: "Bio Markers", score: "95%", description: "Last week avg scoring", route: "/bio-markers" },
+    { title: "Overall Score", score: "75%", description: "Overall Score", isBottom: true },
   ];
 
   const scoreHistory = [
@@ -41,31 +30,29 @@ const Dashboard = () => {
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
-    if (!file) return; 
-    const data = new FormData(); 
+    if (!file) return;
+    const data = new FormData();
     data.append("file", file);
     data.append("upload_preset", "healthguard_pro");
-  
+
     try {
       const res = await fetch("https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload", {
         method: "POST",
         body: data,
       });
-  
+
       if (!res.ok) {
         throw new Error("Failed to upload the image. Please check your Cloudinary credentials and preset.");
       }
-  
+
       const uploadedImage = await res.json();
       setProfileImage(uploadedImage.secure_url); 
-      console.log("Uploaded Image URL:", uploadedImage.secure_url); 
     } catch (error) {
       console.error("Error uploading image:", error.message);
       alert("Image upload failed. Please try again.");
     }
   };
-  
-  
+
   const handleDeleteImage = () => {
     setProfileImage(defaultImage); 
     setShowOptions(false); 
@@ -80,15 +67,15 @@ const Dashboard = () => {
             <button
               className="confirm-button"
               onClick={() => {
-                toast.dismiss(t.id); 
-                  
+                toast.dismiss(t.id);
+                
               }}
             >
               Confirm
             </button>
             <button
               className="cancel-button"
-              onClick={() => toast.dismiss(t.id)} 
+              onClick={() => toast.dismiss(t.id)}
             >
               Cancel
             </button>
@@ -96,20 +83,43 @@ const Dashboard = () => {
         </div>
       ),
       {
-        duration: 9000, 
+        duration: 9000,
         position: "top-center",
       }
     );
   };
 
+  const handleCardClick = (route, title) => {
+    if (title === "Overall Score") {
+      
+      console.log("No action for Overall Score card");
+      return;
+    } else {
+      
+      setLoading(true); 
+      setTimeout(() => {
+        setLoading(false); 
+        window.location.href = route; 
+      }, 2000); 
+    }
+  };
+
   return (
     <div className="dashboard">
+      
+      {loading && (
+        <div className="loader-overlay">
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress color="success" />
+          </Box>
+        </div>
+      )}
+
       <nav className="navbar">
         <div className="logo">
           <a href="/">HealthGuard Pro</a>
         </div>
         <ul className="nav-links">
-          
           <li>
             <a href="/">Leaderboard</a>
           </li>
@@ -120,7 +130,7 @@ const Dashboard = () => {
           </li>
         </ul>
       </nav>
-      
+
       <div className="profile-section">
         <div className="profile-container">
           <div
@@ -151,7 +161,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="dashboard-header">
         <h2>
           Health and Wellness
@@ -159,18 +169,13 @@ const Dashboard = () => {
           Dashboard
         </h2>
       </div>
-      
+
       <div className="card-container">
         {data.map((item, index) => (
           <div
-            className={`card ${
-              item.title === "Bio Markers"
-                ? "bio-markers"
-                : item.title === "Overall Score"
-                ? "overall-score"
-                : ""
-            }`}
+            className={`card ${item.title.toLowerCase().replace(/\s/g, '-')}`}
             key={index}
+            onClick={() => handleCardClick(item.route, item.title)}
           >
             <h3>{item.title}</h3>
             <p className="score">{item.score}</p>
@@ -181,7 +186,7 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      
+
       <h3 className="score-history-title">Score History</h3>
       <table className="score-history-table">
         <thead>
@@ -205,6 +210,7 @@ const Dashboard = () => {
           ))}
         </tbody>
       </table>
+
       <ToastContainer />
     </div>
   );
