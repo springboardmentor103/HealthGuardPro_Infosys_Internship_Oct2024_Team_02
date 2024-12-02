@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import endpoints from "../config/apiConfig";
 import "../styles/otpverification.css";
 
 const OtpVerification = () => {
@@ -12,6 +13,8 @@ const OtpVerification = () => {
   const [timer, setTimer] = useState(30);
   const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email || "";
 
   useEffect(() => {
     if (timer > 0) {
@@ -19,35 +22,6 @@ const OtpVerification = () => {
       return () => clearInterval(interval);
     }
   }, [timer]);
-
-  const handleVerifyOtp = () => {
-    if (!otp || otp.length !== 6) {
-      setShowError(true);
-      toast.error("Please enter a complete OTP.");
-      setTimeout(() => setShowError(false), 820); // Match animation duration
-      return;
-    }
-    if (/^\d{6}$/.test(otp)) {
-      setIsLoading(true);
-      toast.success(`OTP Verified: ${otp}`);
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/reset-password");
-      }, 100);
-    } else {
-      setShowError(true);
-      toast.error("Please enter a valid 6-digit OTP.");
-      setTimeout(() => setShowError(false), 820); // Match animation duration
-    }
-  };
-
-  const handleKeyDown = (e, index) => {
-    if (e.key === "Enter") {
-      handleVerifyOtp();
-    } else if (e.key === "Backspace" && !e.target.value && index > 0) {
-      inputRefs.current[index - 1].focus();
-    }
-  };
 
   const handleInputChange = (e, index) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
@@ -57,38 +31,75 @@ const OtpVerification = () => {
       setOtpArray(newOtpArray);
       setOtp(newOtpArray.join(""));
 
-      // Auto focus next input
       if (value && index < 5) {
         inputRefs.current[index + 1].focus();
-      }
-
-      // Auto verify when all digits are entered
-      if (newOtpArray.every((digit) => digit) && index === 5) {
-        handleVerifyOtp();
       }
     }
   };
 
-  const handleResendOTP = () => {
+  const handleVerifyOtp = async () => {
+    if (!otp || otp.length !== 6) {
+      setShowError(true);
+      toast.error("Please enter a complete OTP.");
+      setTimeout(() => setShowError(false), 820);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(endpoints.verifyOtp, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, otp }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("OTP Verified!");
+        setTimeout(() => {
+          navigate("/reset-password", { state: { email } });
+        }, 1000);
+      } else {
+        toast.error(data.message || "Invalid OTP");
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendOTP = async () => {
     if (timer === 0) {
-      toast.info("OTP resent successfully");
-      setTimer(30);
+      try {
+        const response = await fetch(endpoints.resendOtp, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          toast.info("OTP resent successfully");
+          setTimer(30);
+        } else {
+          toast.error(data.message || "Failed to resend OTP");
+        }
+      } catch (error) {
+        toast.error("Something went wrong. Please try again later.");
+      }
     }
   };
 
   return (
     <div className="container">
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <ToastContainer position="top-center" autoClose={3000} />
       <h1 className="heading">HealthGuard Pro</h1>
       <h2 className="otp">Enter OTP</h2>
       <p className="enter">Please enter the 6-digit code</p>
@@ -103,7 +114,6 @@ const OtpVerification = () => {
             }`}
             value={digit}
             onChange={(e) => handleInputChange(e, index)}
-            onKeyDown={(e) => handleKeyDown(e, index)}
             maxLength="1"
             autoFocus={index === 0}
           />

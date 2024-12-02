@@ -1,22 +1,31 @@
 import React, { useState, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; 
+import endpoints from '../config/apiConfig'; 
 import '../styles/signup.css';
 
 function Signup() {
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
+  const navigate = useNavigate(); 
 
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    password: ''
+    password: '',
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState('');
 
+  const handleKeyDown = (e, nextRef) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      nextRef.current?.focus(); // Move focus to the next input
+    }
+  };
+  
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (e.target.name === 'password') {
@@ -48,23 +57,35 @@ function Signup() {
     return 'Medium';
   };
 
-  const handleKeyDown = (e, nextRef) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      nextRef.current?.focus();
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       setIsLoading(true);
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-        toast.success('Sign up successful!');
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 1000);
+        const response = await fetch(endpoints.register, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.fullName,
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          toast.success('Sign up successful!');
+          setTimeout(() => {
+            navigate('/dashboard'); 
+          }, 1000);
+        } else {
+          toast.error(data.message || 'Sign up failed');
+        }
+      } catch (error) {
+        toast.error('Something went wrong. Please try again later.');
       } finally {
         setIsLoading(false);
       }
@@ -80,27 +101,27 @@ function Signup() {
         </h1>
         <p>Sign Up to get started</p>
         <form onSubmit={handleSubmit}>
-          <input 
-            type="text" 
-            name="fullName" 
-            placeholder="Full Name" 
-            onChange={handleChange} 
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Full Name"
+            onChange={handleChange}
             autoFocus
-            onKeyDown={(e) => handleKeyDown(e, emailInputRef)} 
+            onKeyDown={(e) => handleKeyDown(e, emailInputRef)}
           />
-          <input 
-            type="email" 
-            name="email" 
-            placeholder="Email Address" 
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
             onChange={handleChange}
             ref={emailInputRef}
             onKeyDown={(e) => handleKeyDown(e, passwordInputRef)}
           />
           <div className="password-input-wrapper">
-            <input 
-              type="password" 
-              name="password" 
-              placeholder="Password" 
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
               onChange={handleChange}
               ref={passwordInputRef}
             />
