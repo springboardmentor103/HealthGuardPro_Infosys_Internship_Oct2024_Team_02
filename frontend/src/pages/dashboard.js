@@ -9,7 +9,7 @@ import "../styles/dashboard.css";
 
 const Dashboard = () => {
   const defaultImage =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLdIEENaWqGZV9kxR871g9p6ywGNnqvbyd3z-3MoYMi-Fc6WZvtU7wE68_RHCBINkRjl4&usqp=CAU";
+    "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733317585/images_iwucqp.png";
 
   const [profileImage, setProfileImage] = useState(defaultImage);
   const [showOptions, setShowOptions] = useState(false);
