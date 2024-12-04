@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "../styles/leaderboard.css";
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 const leaderboardData = [
   { name: "Aurelia T. Voss", rank: 1, image: "https://s3-alpha-sig.figma.com/img/e194/5bc4/4c5180626eb8769c6ad7e0e1db14be8b?Expires=1733097600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Ye8QK1mTNN6JZ63DVr6lfQ9YUo15EpUQqkUM8lNblCu0LqZIGaiEzYckz~~FxCKg7CjyCDauRO3WTcXY8Z0HXO5ea3IgzfhgWM8p9ZuWdLs3CxgmzuEmoqR4eUUffN~zhLb8sC7rq7Dw74-tp~LLaqebTyFWsa~hTYpLkpzwJH0B6DgJn2mutwGXMUnlqOC6zPyIdzKnLQ~7uZQXIJkH4nLZqBYdrVspoLroevwLrMMdG1BCKyL5B9Kvv9NXgFjDM95zBtSEytf0ZOPMVh5X52meK4nHAsVYHqvGKiopGDmJlXI4lEBu86H~pqxK-ii1toO-GEGRffsqkT5vl~ToAA__", isTop: true },
@@ -10,6 +14,43 @@ const leaderboardData = [
   { name: "Dario P. Keane", rank: 5, image: "https://s3-alpha-sig.figma.com/img/4ec9/25dd/847c76b187d8b3a8cf5811d5c166f706?Expires=1733097600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Fi8uOBYbcMllVkWXXAygVUlVhNfExH5FC2A1jEf-oHmWSHAsZlpe01kYrRoWXPRxHjw7P3xVACgOj5C4v7punQnyMgdV~5ZQE2I~K-aVJe4Tbg1QkAwLpVCskFBaSMZYXE7i2LPgWLkOSYRRajPGqaovk3DY9YaQqV8Kl0mzd-izuizjdLcPxVJd8v1qZ9HvfXvb-8~OuhsPPvVp55b9hB7IFuzJ4TSlojv7uk7QmByoJK4jVLtoxbepF84a78wKjFoSeMx6OBVFebhw1~bulr1vtCNCS2ZtvoCIUnwbxL0RjGiAwmyxDCzNn6MHvGT8sD~CJljK-AZAi5cwhWEg6A__" },
 ];
 
+
+
+//toast
+
+
+const handleLogout = () => {
+  toast(
+    (t) => (
+      <div className="toast-popup">
+        <p>Are you sure you want to logout ?</p>
+        <div className="toast-popup-buttons">
+          <button
+            className="confirm-button"
+            onClick={() => {
+              toast.dismiss(t.id); 
+                
+            }}
+          >
+            <Link to="/login">Confirm</Link>
+          </button>
+          <button
+            className="cancel-button"
+            onClick={() => toast.dismiss(t.id)} 
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ),
+    {
+      duration: 9000, 
+      position: "top-center",
+    }
+  );
+};
+
+
 const Leaderboard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -18,17 +59,17 @@ const Leaderboard = () => {
   const filteredData = leaderboardData
     .filter((user) => !user.isTop)
     .map((user, index) => ({ ...user, rank: index + 2 })); // Start from rank 2
-    const closeMenu = () => setIsMenuOpen(false); // Function to close the menu
+    const closeMenu = () => setIsMenuOpen(false); 
 
   return (
     <div className="leaderboard-container">
       {/* Header */}
-      <header className="header">
+      <header className="header-lead">
         <h1 className="logo">HealthGuard Pro</h1>
         <nav>
           {/* Hamburger Icon for Mobile */}
           <div className="hamburger" onClick={toggleMenu}>
-            <svg clip-rule="evenodd"   width="25" height="25"  fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21 15.75c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75z" fill-rule="nonzero"/></svg>
+          <img className="ham-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAZlBMVEX///8AAABLS0vPz8+Wlpb8/PxwcHDv7+/p6en19fUJCQnV1dU4ODhaWlqQkJDLy8u7u7ugoKC0tLTCwsJ+fn6FhYUXFxdlZWWsrKxra2sqKipISEimpqZUVFQ6OjoODg6KiooyMjJigk+OAAACd0lEQVR4nO3d7VLCMBCF4aAtFIEiVlBUQO7/JrUqg782KcnMzm7f5wrOGWjTjzQJAQAAAAAAAAAAAAAAAAD8m3fb1Z0dq203H9SvmU7smTbJ/epWO+yNPuu0grN37aQ3e5+lFJzvtHNm2CUcjfVZO2WWZfyP+qydMdNzrOBCO2G2RaThi3bAbC9ywZl2vgLk8+mrdrwCXsWGe+14BezFhm/a8Qp4Exs+aMcr4EFsqJ2uCLGh5Su2i53Y0O5F99Wd2NDqfdN/rdhwrR2vgHuxoYOTqXwqDeFDO2C2j0jD2vqYf47eIFo/Etexgtb/p7H/6I9KO2WGKqVgCI/aOW/2mFbw+z7Y4gPhyWSa9CzxT1MdtfMOdKzSH3lfSi7u7VgMrgcAAAAAAAAAAOyYd5vKjs3Azy1C/XTQfpc02OEp8VuEXnfWjnuTc5da0O5k9ug09l8r7ZwZDikFbb7hvpjGC1qf6S3P8v7WaCfMFpuusNUOmG0rF6y18xUgD4t2JwtdydOG7A6FV/KguNSOV8BRbHjSjlfASWyona6Ikf+G/o9D/+dS/+Oh/2sa/9elI7i38H9/OIJ7/BE8p7E8KCY+awthbfPSJv156Qieefecv7cAAAAAAAAAAACWOF8nqmmtvWBbtkNKGl2vbZ+8XpvdaUOJa+65Xzdxo50yyyZe0P36pf7XoLW9Pmsvtkar+7WgrR+FPflI9L8mu/919f3vjaCdrgixof1Taexkan2878n7zPjfK8j6LO+ePNPb/55d/vddG8HeeYansf+KfTIzhj0s/e9DOoK9ZA3vB9ymf4/gfU/nnvd9uQEAAAAAAAAAAAAAAADApi8vTlbv6n3FPwAAAABJRU5ErkJggg=="></img>
             <div></div>
             <div></div>
             <div></div>
@@ -36,12 +77,12 @@ const Leaderboard = () => {
           </div>
 
           {/* Navbar Menu */}
-          <div className={`nav-menu ${isMenuOpen ? "active" : ""}`}>
+          <div className={`navbar-menu ${isMenuOpen ? "active" : ""}`}>
           <button className="close-ham" onClick={closeMenu} ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
             </button>
-            <button className="nav-button"><Link to="/quiz">Take Test</Link></button>
-            <button className="nav-button"><Link to="/dashboard">DashBoard</Link></button>
-            <button className="nav-button logout-button"><Link to="*">LogOut</Link></button>
+      
+            <button className="navbar-button"><Link to="/dashboard">Dashboard</Link></button>
+            <button className="navbar-button logout-button no-hover" onClick={handleLogout}>Logout</button>
           </div>
         </nav>
       </header>
@@ -85,8 +126,9 @@ const Leaderboard = () => {
       {/* Leaderboard List */}
       <div className="leaderboard-list">
         <div className="list-header">
-          <h3>Leaderboard</h3>
-          <h3>Rank</h3>
+          <p className="list-name">Leaderboard</p>
+          <p className="list-name">Bio Markers Rank <div className="green-box"></div></p>
+      
         </div>
         {filteredData.map((user) => (
           <div className="list-item" key={user.rank}>
@@ -98,6 +140,7 @@ const Leaderboard = () => {
           </div>
         ))}
       </div>
+      <ToastContainer />
     </div>
   );
 };

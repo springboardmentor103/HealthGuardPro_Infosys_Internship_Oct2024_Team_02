@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import { useNavigate } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/dashboard.css";
-// import { Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const defaultImage =
@@ -13,16 +13,18 @@ const Dashboard = () => {
 
   const [profileImage, setProfileImage] = useState(defaultImage);
   const [showOptions, setShowOptions] = useState(false);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
-  const [showOptions, setShowOptions] = useState(false); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const navigate = useNavigate();
+
   const data = [
-    { title: "Physical Fitness", score: "95%", description: "Overall Score", route: "/physical-fitness" },
-    { title: "Nutrition", score: "95%", description: "Overall Score", route: "/nutrition" },
-    { title: "Mental Well-Being", score: "95%", description: "Last week avg scoring", route: "/mental-wellness" },
-    { title: "Lifestyle", score: "95%", description: "Last week avg scoring", route: "/lifestyle" },
-    { title: "Bio Markers", score: "95%", description: "Last week avg scoring", route: "/bio-markers" },
+    { title: "Physical Fitness", score: "95%", description: "Overall Score", route: "/quiz" },
+    { title: "Nutrition", score: "95%", description: "Overall Score", route: "/nutritionquiz" },
+    { title: "Mental Well-Being", score: "95%", description: "Last week avg scoring", route: "/mentalquiz" },
+    { title: "Lifestyle", score: "95%", description: "Last week avg scoring", route: "/lifequiz" },
+    { title: "Bio Markers", score: "95%", description: "Last week avg scoring", route: "/biomarkersquiz" },
     { title: "Overall Score", score: "75%", description: "Overall Score", isBottom: true },
   ];
 
@@ -35,6 +37,7 @@ const Dashboard = () => {
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
+
     const data = new FormData();
     data.append("file", file);
     data.append("upload_preset", "healthguard_pro");
@@ -50,16 +53,17 @@ const Dashboard = () => {
       }
 
       const uploadedImage = await res.json();
-      setProfileImage(uploadedImage.secure_url); 
+      setProfileImage(uploadedImage.secure_url);
+      toast.success("Image uploaded successfully!");
     } catch (error) {
       console.error("Error uploading image:", error.message);
-      alert("Image upload failed. Please try again.");
+      toast.error("Image upload failed. Please try again.");
     }
   };
 
   const handleDeleteImage = () => {
-    setProfileImage(defaultImage); 
-    setShowOptions(false); 
+    setProfileImage(defaultImage);
+    setShowOptions(false);
   };
 
   const handleLogout = () => {
@@ -72,10 +76,7 @@ const Dashboard = () => {
               className="confirm-button"
               onClick={() => {
                 toast.dismiss(t.id);
-                
-                toast.dismiss(t.id); 
-                navigate('/');
-                  
+                navigate("/");
               }}
             >
               Confirm
@@ -89,50 +90,69 @@ const Dashboard = () => {
           </div>
         </div>
       ),
-      {
-        duration: 9000,
-        position: "top-center",
-      }
+      { duration: 9000, position: "top-center" }
     );
   };
 
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
-      
       console.log("No action for Overall Score card");
       return;
-    } else {
-      
-      setLoading(true); 
-      setTimeout(() => {
-        setLoading(false); 
-        window.location.href = route; 
-      }, 2000); 
     }
+
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      navigate(route);
+    }, 2000);
   };
 
   return (
     <div className="dashboard">
-      
       {loading && (
         <div className="loader-overlay">
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
             <CircularProgress color="success" />
           </Box>
         </div>
       )}
 
-      <nav className="navbar">
+      {/* <nav className="navbar">
         <div className="logo">
           <a href="/dashboard">HealthGuard Pro</a>
         </div>
         <ul className="nav-links">
           <li>
-            <a href="/leaderboard">Leaderboard</a>
+           <a> <Link to="/leaderboard">Leaderboard</Link></a>
           </li>
           <li>
             <div className="parent-container">
-              <button className="logout-button" onClick={handleLogout}>Logout</button>
+              <button className="logout-button" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          </li>
+        </ul>
+      </nav> */}
+
+<nav className="navbar">
+        <div className="logo">
+          <a href="/">HealthGuard Pro</a>
+        </div>
+        <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </div>
+        <ul className={`nav-links ${isMenuOpen ? "active" : ""}`}>
+          <li>
+            <Link to="/leaderboard">Leaderboard</Link>
+          </li>
+          <li>
+            <div className="parent-container">
+              <button className="logout-button" onClick={handleLogout}>
+                Logout
+              </button>
             </div>
           </li>
         </ul>
@@ -142,7 +162,7 @@ const Dashboard = () => {
         <div className="profile-container">
           <div
             className="profile-image-background"
-            onClick={() => setShowOptions(!showOptions)} 
+            onClick={() => setShowOptions(!showOptions)}
           >
             <img className="profile-image" src={profileImage} alt="Profile" />
           </div>
@@ -155,7 +175,10 @@ const Dashboard = () => {
           />
           {showOptions && (
             <div className="profile-options">
-              <button onClick={() => document.getElementById("file-input").click()} className="profile-option-btn">
+              <button
+                onClick={() => document.getElementById("file-input").click()}
+                className="profile-option-btn"
+              >
                 Update
               </button>
               <button onClick={handleDeleteImage} className="profile-option-btn">
@@ -180,13 +203,15 @@ const Dashboard = () => {
       <div className="card-container">
         {data.map((item, index) => (
           <div
-            className={`card ${item.title.toLowerCase().replace(/\s/g, '-')}`}
+            className={`card ${item.title.toLowerCase().replace(/\s/g, "-")}`}
             key={index}
             onClick={() => handleCardClick(item.route, item.title)}
           >
+            {/* <Link to={`${item.route}`} key={index}> */}
             <h3>{item.title}</h3>
             <p className="score">{item.score}</p>
             <p>{item.description}</p>
+            {/* </Link> */}
             <div className="progress-bar">
               <div className="progress" style={{ width: item.score }}></div>
             </div>
@@ -211,7 +236,12 @@ const Dashboard = () => {
               <td>{item.timeStamp}</td>
               <td>{item.overallScore}</td>
               <td>
-                <button className="view-button">View</button>
+                <button
+                  className="view-button"
+                  onClick={() => navigate(`/score/${item.id}`)}
+                >
+                  View
+                </button>
               </td>
             </tr>
           ))}
