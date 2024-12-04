@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [loading, setLoading] = useState(false); 
 
-  const [showOptions, setShowOptions] = useState(false); 
+  // const [showOptions, setShowOptions] = useState(false); 
   const navigate = useNavigate();
   const data = [
     { title: "Physical Fitness", score: "95%", description: "Overall Score", route: "/physical-fitness" },
