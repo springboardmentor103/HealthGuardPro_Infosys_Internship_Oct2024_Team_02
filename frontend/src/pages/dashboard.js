@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from "../context/AuthContext";
 import 'react-toastify/dist/ReactToastify.css';
 import "../styles/dashboard.css";
 // import { Navigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const defaultImage =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLdIEENaWqGZV9kxR871g9p6ywGNnqvbyd3z-3MoYMi-Fc6WZvtU7wE68_RHCBINkRjl4&usqp=CAU";
+    "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733317585/images_iwucqp.png";
 
   const [profileImage, setProfileImage] = useState(defaultImage);
   const [showOptions, setShowOptions] = useState(false);
   const [loading, setLoading] = useState(false); 
-
-  // const [showOptions, setShowOptions] = useState(false); 
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const data = [
     { title: "Physical Fitness", score: "95%", description: "Overall Score", route: "/physical-fitness" },
@@ -71,11 +71,13 @@ const Dashboard = () => {
             <button
               className="confirm-button"
               onClick={() => {
+                logout();
+
                 toast.dismiss(t.id);
-                
-                toast.dismiss(t.id); 
-                navigate('/');
-                  
+
+                navigate("/login");
+
+                toast.success("You have been logged out successfully!");
               }}
             >
               Confirm
