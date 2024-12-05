@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { data } from '../data/nutridata.js';
 import '../styles/quiz.css';
 
@@ -10,10 +13,20 @@ function NutritionQuizPage() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
 
   const currentCategory = categories[currentCategoryIndex];
   const questions = data[currentCategory];
   const question = questions[index];
+
+  useEffect(() => {
+    if (showPopup) {
+      document.body.classList.add('popup-active');
+    } else {
+      document.body.classList.remove('popup-active');
+    }
+  }, [showPopup]);
 
   const handleOptionClick = (option, score) => {
     setErrorMessage('');
@@ -53,8 +66,29 @@ function NutritionQuizPage() {
           setCurrentCategoryIndex((prevCategoryIndex) => prevCategoryIndex + 1);
           setIndex(0);
         } else {
-          console.log('Final User Answers:', userAnswers);
-          console.log('Final Total Score:', totalScore);
+          // Calculate the Total Possible Score and Score Obtained
+          const totalPossibleScore = categories.reduce(
+            (acc, category) => acc + data[category].length * 10, // Each question is worth 10 marks
+            0
+          );
+    
+          const scoreObtained = userAnswers.reduce(
+            (acc, answer) => acc + answer.score, // Sum of scores for each correct answer
+            0
+          );
+    
+          // Calculate percentage using the formula: (Score Obtained / Total Possible Score) * 100
+          const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); // Rounded to the nearest integer
+    
+          // Save the final score in localStorage
+          localStorage.setItem('nutritionScore', percentage);
+    
+          setShowPopup(true);
+    
+          // Redirect to dashboard after 2 seconds
+          setTimeout(() => {
+            navigate('/'); // Navigate to the dashboard page
+          }, 2000);
         }
         return prevIndex;
       }
@@ -88,7 +122,27 @@ function NutritionQuizPage() {
             ? 'SUBMIT'
             : 'NEXT'}
         </button>
+        <div className="progress-bar-container">
+          <div
+            className="progress-bar"
+            style={{
+              width: `${(totalScore / (categories.length * questions.length * 10)) * 100}%`,
+            }}
+          ></div>
+        </div>
       </div>
+
+      {showPopup && (
+        <div className="congratulations-popup">
+          <div className="popup-content">
+            <h2>Congratulations!</h2>
+            <p>You have completed the quiz!</p>
+            <img src="https://cdn-icons-png.flaticon.com/128/7480/7480607.png" alt="Celebration" />
+          </div>
+        </div>
+      )}
+
+      <ToastContainer />
     </div>
   );
 }

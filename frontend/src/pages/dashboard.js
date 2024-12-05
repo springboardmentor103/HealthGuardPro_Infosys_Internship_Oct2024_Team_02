@@ -1,36 +1,55 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import { useNavigate } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect, useMemo } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import Confetti from "react-confetti";
 import "../styles/dashboard.css";
-// import { Navigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const defaultImage =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLdIEENaWqGZV9kxR871g9p6ywGNnqvbyd3z-3MoYMi-Fc6WZvtU7wE68_RHCBINkRjl4&usqp=CAU";
 
   const [profileImage, setProfileImage] = useState(defaultImage);
+  const [loading, setLoading] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [loading, setLoading] = useState(false); 
+  const [scores, setScores] = useState({
+    "Physical Fitness": null,
+    Nutrition: null,
+    "Mental Well-Being": null,
+    Lifestyle: null,
+    "Bio Markers": null,
+  });
+  const [showConfetti, setShowConfetti] = useState(false);
+  //const [nutritionScore, setNutritionScore] = useState(null);
 
-  const [showOptions, setShowOptions] = useState(false); 
   const navigate = useNavigate();
-  const data = [
-    { title: "Physical Fitness", score: "95%", description: "Overall Score", route: "/physical-fitness" },
-    { title: "Nutrition", score: "95%", description: "Overall Score", route: "/nutrition" },
-    { title: "Mental Well-Being", score: "95%", description: "Last week avg scoring", route: "/mental-wellness" },
-    { title: "Lifestyle", score: "95%", description: "Last week avg scoring", route: "/lifestyle" },
-    { title: "Bio Markers", score: "95%", description: "Last week avg scoring", route: "/bio-markers" },
-    { title: "Overall Score", score: "75%", description: "Overall Score", isBottom: true },
-  ];
+
+  // Retrieve full name from localStorage
+  const fullName = localStorage.getItem("userFullName") || "User";
+
+  const data = useMemo(() => [
+    { title: "Physical Fitness", description: "Overall Score", route: "/quiz" },
+    { title: "Nutrition", description: "Overall Score", route: "/nutritionquiz" },
+    { title: "Mental Well-Being", description: "Last week avg scoring", route: "/mentalquiz" },
+    { title: "Lifestyle", description: "Last week avg scoring", route: "/lifestylequiz" },
+    { title: "Bio Markers", description: "Last week avg scoring", route: "/biomarkersquiz", colSpan: true },
+    { title: "Overall Score", description: "Overall Score", isBottom: true, colSpan: true },
+  ], []);
 
   const scoreHistory = [
     { id: 1, timeStamp: "2024-11-18 10:00 AM", overallScore: "95%" },
     { id: 2, timeStamp: "2024-11-17 5:00 PM", overallScore: "86%" },
     { id: 3, timeStamp: "2024-11-16 2:30 PM", overallScore: "75%" },
+    { id: 4, timeStamp: "2024-11-15 7:38 AM", overallScore: "100%" },
+    { id: 5, timeStamp: "2024-11-14 11:30 AM", overallScore: "63%" },
   ];
+  const handleViewBoard = (id) => {
+    console.log(`View Board clicked for ID: ${id}`);
+    // Add navigation or modal logic here
+  };
+  
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
@@ -40,17 +59,20 @@ const Dashboard = () => {
     data.append("upload_preset", "healthguard_pro");
 
     try {
-      const res = await fetch("https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload", {
-        method: "POST",
-        body: data,
-      });
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
 
       if (!res.ok) {
-        throw new Error("Failed to upload the image. Please check your Cloudinary credentials and preset.");
+        throw new Error("Failed to upload the image.");
       }
 
       const uploadedImage = await res.json();
-      setProfileImage(uploadedImage.secure_url); 
+      setProfileImage(uploadedImage.secure_url);
     } catch (error) {
       console.error("Error uploading image:", error.message);
       alert("Image upload failed. Please try again.");
@@ -58,34 +80,34 @@ const Dashboard = () => {
   };
 
   const handleDeleteImage = () => {
-    setProfileImage(defaultImage); 
-    setShowOptions(false); 
+    setProfileImage(defaultImage);
+    setShowOptions(false);
   };
 
   const handleLogout = () => {
     toast(
       (t) => (
-        <div className="toast-popup">
-          <p>Are you sure you want to logout?</p>
-          <div className="toast-popup-buttons">
-            <button
-              className="confirm-button"
-              onClick={() => {
-                toast.dismiss(t.id);
-                
-                toast.dismiss(t.id); 
-                navigate('/');
-                  
-              }}
-            >
-              Confirm
-            </button>
-            <button
-              className="cancel-button"
-              onClick={() => toast.dismiss(t.id)}
-            >
-              Cancel
-            </button>
+        <div className="popup">
+          <div className="toast-popup">
+            <p>Are you sure you 
+              want to logout? </p>
+            <div className="toast-popup-buttons">
+              <button
+                className="confirm-button"
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  navigate("/login");
+                }}
+              >
+                Confirm
+              </button>
+              <button
+                className="cancel-button"
+                onClick={() => toast.dismiss(t.id)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       ),
@@ -98,29 +120,88 @@ const Dashboard = () => {
 
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
-      
       console.log("No action for Overall Score card");
       return;
-    } else {
-      
-      setLoading(true); 
-      setTimeout(() => {
-        setLoading(false); 
-        window.location.href = route; 
-      }, 2000); 
+    }
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      // Simulate a score update
+      const randomScore = Math.floor(Math.random() * 101);
+      localStorage.setItem(`${title}Score`, randomScore);
+      handleScoreUpdate(title); // Update the score dynamically
+      navigate(route); // Make sure navigate is called once
+    }, 2000);
+  };
+
+  /*const retrieveScores = () => {
+    const updatedScores = { ...scores };
+    Object.keys(scores).forEach((key) => {
+      const storedScore = localStorage.getItem(`${key.toLowerCase().replace(/\s/g, '')}Score`);
+      updatedScores[key] = storedScore ? parseInt(storedScore, 10) : 0;
+    });
+    setScores(updatedScores);
+  };
+
+  useEffect(() => {
+    retrieveScores();
+  },[]);*/
+
+  const handleScoreUpdate = (category) => {
+    const savedScore = localStorage.getItem(`${category}Score`);
+    if (savedScore) {
+      setScores((prevScores) => ({
+        ...prevScores,
+        [category]: parseInt(savedScore, 10),
+      }));
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 5000); // Confetti duration
     }
   };
 
+  // Calculate Overall Score
+  const calculateOverallScore = () => {
+    const physicalScore = scores["Physical Fitness"];
+    const nutritionScore = scores["Nutrition"];
+    const mentalScore = scores["Mental Well-Being"];
+    const lifestyleScore = scores["Lifestyle"];
+    const biomarkerScore = scores["Bio Markers"];
+
+    // Calculate the sum of all category scores
+    const totalScore =
+      (physicalScore || 0) +
+      (nutritionScore || 0) +
+      (mentalScore || 0) +
+      (lifestyleScore || 0) +
+      (biomarkerScore || 0);
+
+    // Average the score (out of 5 categories)
+    const overallScore = totalScore / 5;
+
+    return overallScore;
+  };
+
+  const overallScore = calculateOverallScore();
+
+  useEffect(() => {
+    // Initialize scores from localStorage for all categories
+    data.forEach((item) => {
+      handleScoreUpdate(item.title);
+    });
+  }, [data]);
+
   return (
     <div className="dashboard">
-      
       {loading && (
         <div className="loader-overlay">
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "20vh" }}>
             <CircularProgress color="success" />
+            <p style={{ marginTop: "20px" }}>Loading... Please wait</p>
           </Box>
         </div>
       )}
+
+      {showConfetti && <Confetti />}
 
       <nav className="navbar">
         <div className="logo">
@@ -132,7 +213,9 @@ const Dashboard = () => {
           </li>
           <li>
             <div className="parent-container">
-              <button className="logout-button" onClick={handleLogout}>Logout</button>
+              <button className="logout-button" onClick={handleLogout}>
+                Logout
+              </button>
             </div>
           </li>
         </ul>
@@ -140,19 +223,10 @@ const Dashboard = () => {
 
       <div className="profile-section">
         <div className="profile-container">
-          <div
-            className="profile-image-background"
-            onClick={() => setShowOptions(!showOptions)} 
-          >
+          <div className="profile-image-background" onClick={() => setShowOptions(!showOptions)}>
             <img className="profile-image" src={profileImage} alt="Profile" />
           </div>
-          <input
-            type="file"
-            id="file-input"
-            style={{ display: "none" }}
-            accept="image/*"
-            onChange={handleImageChange}
-          />
+          <input type="file" id="file-input" style={{ display: "none" }} accept="image/*" onChange={handleImageChange} />
           {showOptions && (
             <div className="profile-options">
               <button onClick={() => document.getElementById("file-input").click()} className="profile-option-btn">
@@ -164,7 +238,7 @@ const Dashboard = () => {
             </div>
           )}
           <div className="profile-name-badge">
-            <p className="profile-name">Jack</p>
+            <p className="profile-name">{fullName}</p>
           </div>
         </div>
       </div>
@@ -178,21 +252,31 @@ const Dashboard = () => {
       </div>
 
       <div className="card-container">
-        {data.map((item, index) => (
-          <div
-            className={`card ${item.title.toLowerCase().replace(/\s/g, '-')}`}
-            key={index}
-            onClick={() => handleCardClick(item.route, item.title)}
-          >
-            <h3>{item.title}</h3>
-            <p className="score">{item.score}</p>
-            <p>{item.description}</p>
-            <div className="progress-bar">
-              <div className="progress" style={{ width: item.score }}></div>
-            </div>
-          </div>
-        ))}
+  {data.map((item, index) => (
+    <div
+      key={index}
+      className={`card ${item.colSpan ? "col-span-2" : ""}`}
+      onClick={() => handleCardClick(item.route, item.title)}
+    >
+      <h3>{item.title}</h3>
+      <p className="score">
+        {item.title === "Overall Score" 
+          ? `${overallScore.toFixed(0)}%` 
+          : `${scores[item.title] || 0}%`}
+      </p>
+      <p>{item.description}</p>
+      <div className="progress-bar">
+        <div 
+          className="progress" 
+          style={{
+            width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`
+          }}
+        ></div>
       </div>
+    </div>
+  ))}
+</div>
+
 
       <h3 className="score-history-title">Score History</h3>
       <table className="score-history-table">
@@ -205,16 +289,23 @@ const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {scoreHistory.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.timeStamp}</td>
-              <td>{item.overallScore}</td>
-              <td>
-                <button className="view-button">View</button>
-              </td>
-            </tr>
-          ))}
+          {scoreHistory.slice(0, 5).map((item) => (
+  <tr key={item.id}>
+    <td>{item.id}</td>
+    <td>{item.timeStamp}</td>
+    <td>{item.overallScore}</td>
+    <td>
+  <button
+    className="view-button"
+    onClick={() => handleViewBoard(item.id)}
+  >
+    View
+  </button>
+</td>
+
+  </tr>
+))}
+
         </tbody>
       </table>
 
@@ -224,3 +315,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+

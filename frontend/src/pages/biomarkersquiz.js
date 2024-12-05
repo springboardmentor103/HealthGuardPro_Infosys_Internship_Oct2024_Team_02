@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { data } from '../data/biodata.js';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { data } from '../data/biodata.js'; // Make sure you have your data structure here
 import '../styles/quiz.css';
 
 function BiomarkerQuizPage() {
@@ -10,38 +13,61 @@ function BiomarkerQuizPage() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
 
   const currentCategory = categories[currentCategoryIndex];
   const questions = data[currentCategory];
   const question = questions[index];
 
+  useEffect(() => {
+    if (showPopup) {
+      document.body.classList.add('popup-active');
+    } else {
+      document.body.classList.remove('popup-active');
+    }
+  }, [showPopup]);
+
   const handleOptionClick = (option, score) => {
+    console.log(`Option selected: ${option}, Score: ${score}`); // Log the selected option and its score
     setErrorMessage('');
     const existingAnswerIndex = userAnswers.findIndex((ans) => ans.questionId === question.id);
-
+  
     if (existingAnswerIndex !== -1) {
       const updatedAnswers = [...userAnswers];
       const oldScore = updatedAnswers[existingAnswerIndex].score;
       updatedAnswers[existingAnswerIndex] = { questionId: question.id, answer: option, score };
-
-      setTotalScore((prevScore) => prevScore - oldScore + score);
+  
+      setTotalScore((prevScore) => {
+        const newScore = prevScore - oldScore + score;
+        console.log(`Updated Total Score: ${newScore}`); // Log the total score
+        return newScore;
+      });
       setUserAnswers(updatedAnswers);
     } else {
       setUserAnswers((prevAnswers) => [
         ...prevAnswers,
         { questionId: question.id, answer: option, score },
       ]);
-      setTotalScore((prevScore) => prevScore + score);
+      setTotalScore((prevScore) => {
+        const newScore = prevScore + score;
+        console.log(`Updated Total Score: ${newScore}`); // Log the total score
+        return newScore;
+      });
     }
-
+  
     setSelectedOption(option);
   };
+  
+  
 
   const incrementIndex = () => {
     if (!selectedOption) {
       setErrorMessage('Please answer this question before proceeding.');
       return;
     }
+
+    
 
     setIndex((prevIndex) => {
       const newIndex = prevIndex + 1;
@@ -53,12 +79,39 @@ function BiomarkerQuizPage() {
           setCurrentCategoryIndex((prevCategoryIndex) => prevCategoryIndex + 1);
           setIndex(0);
         } else {
-          console.log('Final User Answers:', userAnswers);
-          console.log('Final Total Score:', totalScore);
+          // Calculate the Total Possible Score and Score Obtained
+          const totalPossibleScore = categories.reduce(
+            (acc, category) => acc + data[category].length * 10, // Each question is worth 10 marks
+            0
+          );
+    
+          const scoreObtained = userAnswers.reduce(
+            (acc, answer) => acc + answer.score, // Sum of scores for each correct answer
+            0
+          );
+          console.log(scoreObtained);
+          console.log(totalPossibleScore);
+    
+          // Calculate percentage using the formula: (Score Obtained / Total Possible Score) * 100
+          const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); 
+          console.log(percentage);
+    
+          // Save the final score in localStorage
+          localStorage.setItem('biomarkerScore', percentage);
+    
+          setShowPopup(true);
+    
+          // Redirect to dashboard after 2 seconds
+          setTimeout(() => {
+            navigate('/'); // Navigate to the dashboard page
+          }, 2000);
         }
         return prevIndex;
       }
     });
+    
+    
+    
   };
 
   return (
@@ -88,9 +141,30 @@ function BiomarkerQuizPage() {
             ? 'SUBMIT'
             : 'NEXT'}
         </button>
+        <div className="progress-bar-container">
+          <div
+            className="progress-bar"
+            style={{
+              width: `${(totalScore / (categories.length * questions.length * 10)) * 100}%`,
+            }}
+          ></div>
+        </div>
       </div>
+
+      {showPopup && (
+        <div className="congratulations-popup">
+          <div className="popup-content">
+            <h2>Congratulations!</h2>
+            <p>You have completed the quiz!</p>
+            <img src="https://cdn-icons-png.flaticon.com/128/7480/7480607.png" alt="Celebration" />
+          </div>
+        </div>
+      )}
+
+      <ToastContainer />
     </div>
   );
 }
 
 export default BiomarkerQuizPage;
+
