@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Dashboard = require("../models/Dashboard");
 const generateToken = require('../utils/generateToken');
 const bcrypt = require('bcryptjs');
 
@@ -12,6 +13,9 @@ const registerUser = async (req, res) => {
 
     const user = await User.create({ name, email, password });
     if (user) {
+
+      await Dashboard.create({ user: user._id });
+    
       res.status(201).json({
         _id: user._id,
         name: user.name,

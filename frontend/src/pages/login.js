@@ -1,11 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import endpoints from '../config/apiConfig'; 
+import AuthContext from '../context/AuthContext'; 
 import '../styles/login.css';
 
 function LoginPage() {
+  const { login } = useContext(AuthContext); // Access the login function from AuthContext
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +50,7 @@ function LoginPage() {
 
       if (response.ok) {
         toast.success('Login successful!');
-        localStorage.setItem('token', data.token); // Save token for authentication
+        login(data.token); // Save token and set authenticated state via AuthContext
         setTimeout(() => {
           navigate('/dashboard'); 
         }, 1000);

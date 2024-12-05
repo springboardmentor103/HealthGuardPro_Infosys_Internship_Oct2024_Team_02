@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import React, { useState, useEffect, useMemo, useContext } from "react";
+import { ToastContainer, toast } from "react-toastify";  // Keep this import
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Confetti from "react-confetti";
+import AuthContext from "../context/AuthContext";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
   const defaultImage =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLdIEENaWqGZV9kxR871g9p6ywGNnqvbyd3z-3MoYMi-Fc6WZvtU7wE68_RHCBINkRjl4&usqp=CAU";
+    "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733317585/images_iwucqp.png";
 
   const [profileImage, setProfileImage] = useState(defaultImage);
   const [loading, setLoading] = useState(false);
@@ -22,8 +23,8 @@ const Dashboard = () => {
     "Bio Markers": null,
   });
   const [showConfetti, setShowConfetti] = useState(false);
-  //const [nutritionScore, setNutritionScore] = useState(null);
 
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Retrieve full name from localStorage
@@ -45,6 +46,7 @@ const Dashboard = () => {
     { id: 4, timeStamp: "2024-11-15 7:38 AM", overallScore: "100%" },
     { id: 5, timeStamp: "2024-11-14 11:30 AM", overallScore: "63%" },
   ];
+
   const handleViewBoard = (id) => {
     console.log(`View Board clicked for ID: ${id}`);
     // Add navigation or modal logic here
@@ -89,14 +91,14 @@ const Dashboard = () => {
       (t) => (
         <div className="popup">
           <div className="toast-popup">
-            <p>Are you sure you 
-              want to logout? </p>
+            <p>Are you sure you want to logout?</p>
             <div className="toast-popup-buttons">
               <button
                 className="confirm-button"
                 onClick={() => {
                   toast.dismiss(t.id);
-                  navigate("/login");
+                  logout();  // Call logout function here
+                  navigate("/login"); // Navigate to login page after logout
                 }}
               >
                 Confirm
@@ -117,6 +119,7 @@ const Dashboard = () => {
       }
     );
   };
+  
 
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
@@ -190,7 +193,7 @@ const Dashboard = () => {
     });
   }, [data]);
 
-  return (
+return (
     <div className="dashboard">
       {loading && (
         <div className="loader-overlay">
@@ -252,31 +255,30 @@ const Dashboard = () => {
       </div>
 
       <div className="card-container">
-  {data.map((item, index) => (
-    <div
-      key={index}
-      className={`card ${item.colSpan ? "col-span-2" : ""}`}
-      onClick={() => handleCardClick(item.route, item.title)}
-    >
-      <h3>{item.title}</h3>
-      <p className="score">
-        {item.title === "Overall Score" 
-          ? `${overallScore.toFixed(0)}%` 
-          : `${scores[item.title] || 0}%`}
-      </p>
-      <p>{item.description}</p>
-      <div className="progress-bar">
-        <div 
-          className="progress" 
-          style={{
-            width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`
-          }}
-        ></div>
+        {data.map((item, index) => (
+          <div
+            key={index}
+            className={`card ${item.colSpan ? "col-span-2" : ""}`}
+            onClick={() => handleCardClick(item.route, item.title)}
+          >
+            <h3>{item.title}</h3>
+            <p className="score">
+              {item.title === "Overall Score"
+                ? `${overallScore.toFixed(0)}%`
+                : `${scores[item.title] || 0}%`}
+            </p>
+            <p>{item.description}</p>
+            <div className="progress-bar">
+              <div
+                className="progress"
+                style={{
+                  width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`
+                }}
+              ></div>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
-  ))}
-</div>
-
 
       <h3 className="score-history-title">Score History</h3>
       <table className="score-history-table">
@@ -290,22 +292,17 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {scoreHistory.slice(0, 5).map((item) => (
-  <tr key={item.id}>
-    <td>{item.id}</td>
-    <td>{item.timeStamp}</td>
-    <td>{item.overallScore}</td>
-    <td>
-  <button
-    className="view-button"
-    onClick={() => handleViewBoard(item.id)}
-  >
-    View
-  </button>
-</td>
-
-  </tr>
-))}
-
+            <tr key={item.id}>
+              <td>{item.id}</td>
+              <td>{item.timeStamp}</td>
+              <td>{item.overallScore}</td>
+              <td>
+                <button className="view-button" onClick={() => handleViewBoard(item.id)}>
+                  View
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
 
@@ -315,5 +312,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
