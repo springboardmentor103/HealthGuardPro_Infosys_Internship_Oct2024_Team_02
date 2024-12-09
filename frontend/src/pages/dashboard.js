@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from "react";
+import React, { useState, useEffect, useMemo, useContext,useCallback } from "react";
 import { ToastContainer, toast } from "react-toastify";  // Keep this import
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -19,9 +19,9 @@ const Dashboard = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [scores, setScores] = useState({
     "Physical Fitness": null,
-    Nutrition: null,
+    "Nutrition": null,
     "Mental Well-Being": null,
-    Lifestyle: null,
+    "Lifestyle": null,
     "Bio Markers": null,
   });
   const [showConfetti, setShowConfetti] = useState(false);
@@ -30,7 +30,39 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   // Retrieve full name from localStorage
-  const fullName = localStorage.getItem("userFullName") || "User";
+  const fullName = localStorage.getItem("userName") || "User";
+  const { token } = useContext(AuthContext);
+  const userId = localStorage.getItem("userId");
+
+  const fetchDashboardData = useCallback(async () => {
+    try {
+      const response = await axios.get(endpoints.fetchDashboard(userId), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.status === 200) {
+        const { quizScores, imageUrl, scoreHistory } = response.data;
+  
+        // Set the profile image URL
+        setProfileImage(imageUrl || defaultImage);
+  
+        // Update score history if needed
+        // (handle or log scoreHistory as per requirements)
+      } else {
+        toast.error("Failed to fetch dashboard data.");
+      }
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error.message);
+      toast.error("Error loading dashboard data. Please try again.");
+    }
+  }, [userId, token]); // Dependencies for useCallback
+  
+  // Updated useEffect
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]); 
 
   const data = useMemo(() => [
     { title: "Physical Fitness", description: "Overall Score", route: "/quiz" },
@@ -49,14 +81,13 @@ const Dashboard = () => {
     { id: 5, timeStamp: "2024-11-14 11:30 AM", overallScore: "63%" },
   ];
 
+
   const handleViewBoard = (id) => {
     console.log(`View Board clicked for ID: ${id}`);
     // Add navigation or modal logic here
   };
   
 
-  const { token } = useContext(AuthContext);
-const userId = localStorage.getItem("userId");
 const handleImageChange = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -99,6 +130,8 @@ const handleImageChange = async (event) => {
 
     if (response.status === 200) {
       toast.success("Profile image updated successfully!");
+      setProfileImage(imageUrl);
+      setShowOptions(false);
     } else {
       throw new Error("Failed to send image URL to backend.");
     }
@@ -108,7 +141,33 @@ const handleImageChange = async (event) => {
   }
 };
 
-  const handleDeleteImage = () => {
+  const handleDeleteImage = async() => {
+    try{
+      const imageUrl = defaultImage;
+      const payload = {
+        userId,
+        imageUrl,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await axios.post(endpoints.uploadImage, payload, config);
+
+      if (response.status === 200) {
+        toast.success("Profile image updated successfully!");
+      } else {
+        throw new Error("Failed to send image URL to backend.");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error("Image upload or update failed. Please try again.");
+    }
+
     setProfileImage(defaultImage);
     setShowOptions(false);
   };
