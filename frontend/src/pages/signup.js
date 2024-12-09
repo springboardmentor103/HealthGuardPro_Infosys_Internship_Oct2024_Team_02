@@ -25,7 +25,7 @@ function Signup() {
       nextRef.current?.focus(); // Move focus to the next input
     }
   };
-  
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (e.target.name === 'password') {
@@ -78,6 +78,8 @@ function Signup() {
 
         if (response.ok) {
           toast.success('Sign up successful!');
+          // Save user's full name to localStorage
+          localStorage.setItem('userFullName', formData.fullName);
           setTimeout(() => {
             navigate('/dashboard'); 
           }, 1000);
