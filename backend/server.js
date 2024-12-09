@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const otpRoutes = require('./routes/otpRoutes');
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const leaderboardRoutes = require("./routes/leaderboardRoutes");
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/otp', otpRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/leaderboard", leaderboardRoutes);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
