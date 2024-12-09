@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Confetti from "react-confetti";
 import AuthContext from "../context/AuthContext";
+import axios from "axios";
+import endpoints from "../config/apiConfig";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
@@ -53,33 +55,58 @@ const Dashboard = () => {
   };
   
 
-  const handleImageChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "healthguard_pro");
+  const { token } = useContext(AuthContext);
+const userId = localStorage.getItem("userId");
+const handleImageChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
 
-    try {
-      const res = await fetch(
-        "https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload",
-        {
-          method: "POST",
-          body: data,
-        }
-      );
+  const data = new FormData();
+  data.append("file", file);
+  data.append("upload_preset", "healthguard_pro");
 
-      if (!res.ok) {
-        throw new Error("Failed to upload the image.");
+  try {
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload",
+      {
+        method: "POST",
+        body: data,
       }
+    );
 
-      const uploadedImage = await res.json();
-      setProfileImage(uploadedImage.secure_url);
-    } catch (error) {
-      console.error("Error uploading image:", error.message);
-      alert("Image upload failed. Please try again.");
+    if (!res.ok) {
+      throw new Error("Failed to upload the image.");
     }
-  };
+
+    const uploadedImage = await res.json();
+    const imageUrl = uploadedImage.secure_url;
+
+
+    // Send imageUrl to backend
+    const payload = {
+      userId,
+      imageUrl,
+    };
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axios.post(endpoints.uploadImage, payload, config);
+
+    if (response.status === 200) {
+      toast.success("Profile image updated successfully!");
+    } else {
+      throw new Error("Failed to send image URL to backend.");
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    toast.error("Image upload or update failed. Please try again.");
+  }
+};
 
   const handleDeleteImage = () => {
     setProfileImage(defaultImage);
