@@ -51,7 +51,7 @@ export const data = {
       options: [
         { text: "4-5 hours", score: 8 },
         { text: "6-7 hours", score: 9 },
-        { text: "7-9 hours", score: 100 },
+        { text: "7-9 hours", score: 10 },
         { text: "10-12 hours", score:7 },
       ],
       answer: "7-9 hours",

@@ -81,7 +81,7 @@ function MentalwellQuizPage() {
           const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); // Rounded to the nearest integer
     
           // Save the final score in localStorage
-          localStorage.setItem('mentalScore', percentage);
+          localStorage.setItem('Mental Well-BeingScore', percentage);
     
           setShowPopup(true);
     

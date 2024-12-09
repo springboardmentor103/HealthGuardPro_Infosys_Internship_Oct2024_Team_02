@@ -79,10 +79,8 @@ function NutritionQuizPage() {
     
           // Calculate percentage using the formula: (Score Obtained / Total Possible Score) * 100
           const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); // Rounded to the nearest integer
-    
           // Save the final score in localStorage
-          localStorage.setItem('nutritionScore', percentage);
-    
+          localStorage.setItem('NutritionScore', percentage);
           setShowPopup(true);
     
           // Redirect to dashboard after 2 seconds

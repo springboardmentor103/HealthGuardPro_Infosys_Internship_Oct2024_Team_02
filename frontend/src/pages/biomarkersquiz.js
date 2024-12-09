@@ -29,7 +29,6 @@ function BiomarkerQuizPage() {
   }, [showPopup]);
 
   const handleOptionClick = (option, score) => {
-    console.log(`Option selected: ${option}, Score: ${score}`); // Log the selected option and its score
     setErrorMessage('');
     const existingAnswerIndex = userAnswers.findIndex((ans) => ans.questionId === question.id);
   
@@ -40,7 +39,6 @@ function BiomarkerQuizPage() {
   
       setTotalScore((prevScore) => {
         const newScore = prevScore - oldScore + score;
-        console.log(`Updated Total Score: ${newScore}`); // Log the total score
         return newScore;
       });
       setUserAnswers(updatedAnswers);
@@ -51,7 +49,6 @@ function BiomarkerQuizPage() {
       ]);
       setTotalScore((prevScore) => {
         const newScore = prevScore + score;
-        console.log(`Updated Total Score: ${newScore}`); // Log the total score
         return newScore;
       });
     }
@@ -89,15 +86,12 @@ function BiomarkerQuizPage() {
             (acc, answer) => acc + answer.score, // Sum of scores for each correct answer
             0
           );
-          console.log(scoreObtained);
-          console.log(totalPossibleScore);
     
           // Calculate percentage using the formula: (Score Obtained / Total Possible Score) * 100
           const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); 
-          console.log(percentage);
     
           // Save the final score in localStorage
-          localStorage.setItem('biomarkerScore', percentage);
+          localStorage.setItem('Bio MarkersScore', percentage);
     
           setShowPopup(true);
     

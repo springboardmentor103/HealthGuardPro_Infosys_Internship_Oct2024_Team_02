@@ -83,7 +83,7 @@ function QuizPage() {
           const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); // Rounded to the nearest integer
     
           // Save the final score in localStorage
-          localStorage.setItem('physicalFitnessScore', percentage);
+          localStorage.setItem('Physical FitnessScore', percentage);
     
           setShowPopup(true);
     

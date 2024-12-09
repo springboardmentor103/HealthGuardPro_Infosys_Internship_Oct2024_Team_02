@@ -65,13 +65,14 @@ const Dashboard = () => {
   }, [fetchDashboardData]); 
 
   const data = useMemo(() => [
-    { title: "Physical Fitness", description: "Overall Score", route: "/quiz" },
-    { title: "Nutrition", description: "Overall Score", route: "/nutritionquiz" },
-    { title: "Mental Well-Being", description: "Last week avg scoring", route: "/mentalquiz" },
-    { title: "Lifestyle", description: "Last week avg scoring", route: "/lifestylequiz" },
-    { title: "Bio Markers", description: "Last week avg scoring", route: "/biomarkersquiz", colSpan: true },
-    { title: "Overall Score", description: "Overall Score", isBottom: true, colSpan: true },
+    { title: "Physical Fitness", description: "Fitness Score", route: "/quiz" },
+    { title: "Nutrition", description: "Nutrition Score", route: "/nutritionquiz" },
+    { title: "Mental Well-Being", description: "Mental Health Score", route: "/mentalquiz" },
+    { title: "Lifestyle", description: "Lifestyle Score", route: "/lifestylequiz" },
+    { title: "Bio Markers", description: "Health Indicators", route: "/biomarkersquiz", colSpan: true },
+    { title: "Overall Score", description: "Combined Results", isBottom: true, colSpan: true },
   ], []);
+  
 
   const scoreHistory = [
     { id: 1, timeStamp: "2024-11-18 10:00 AM", overallScore: "95%" },
@@ -215,29 +216,15 @@ const handleImageChange = async (event) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      // Simulate a score update
-      const randomScore = Math.floor(Math.random() * 101);
-      localStorage.setItem(`${title}Score`, randomScore);
       handleScoreUpdate(title); // Update the score dynamically
       navigate(route); // Make sure navigate is called once
     }, 2000);
   };
 
-  /*const retrieveScores = () => {
-    const updatedScores = { ...scores };
-    Object.keys(scores).forEach((key) => {
-      const storedScore = localStorage.getItem(`${key.toLowerCase().replace(/\s/g, '')}Score`);
-      updatedScores[key] = storedScore ? parseInt(storedScore, 10) : 0;
-    });
-    setScores(updatedScores);
-  };
-
-  useEffect(() => {
-    retrieveScores();
-  },[]);*/
-
   const handleScoreUpdate = (category) => {
     const savedScore = localStorage.getItem(`${category}Score`);
+    // console.log(category);
+    // console.log("savedscore: "+savedScore);
     if (savedScore) {
       setScores((prevScores) => ({
         ...prevScores,
@@ -245,6 +232,9 @@ const handleImageChange = async (event) => {
       }));
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000); // Confetti duration
+
+      
+
     }
   };
 

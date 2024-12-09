@@ -81,7 +81,7 @@ function LifestyleQuizPage() {
           const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); // Rounded to the nearest integer
     
           // Save the final score in localStorage
-          localStorage.setItem('lifestyleScore', percentage);
+          localStorage.setItem('LifestyleScore', percentage);
     
           setShowPopup(true);
     
