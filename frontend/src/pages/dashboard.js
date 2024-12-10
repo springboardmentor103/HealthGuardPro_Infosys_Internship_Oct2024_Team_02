@@ -207,7 +207,13 @@ const handleImageChange = async (event) => {
     );
   };
   
-
+  const categoryMapping = {
+    "Physical Fitness": "physicalFitness",
+    "Nutrition": "nutrition",
+    "Mental Well-Being": "mentalWellBeing",
+    "Lifestyle": "lifestyle",
+    "Bio Markers": "bioMarkers",
+  };
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
       console.log("No action for Overall Score card");

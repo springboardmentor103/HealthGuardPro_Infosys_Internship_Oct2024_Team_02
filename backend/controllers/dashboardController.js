@@ -83,8 +83,8 @@ const updateQuizScores = async (req, res) => {
       scores: { ...dashboard.quizScores },
     });
 
-    if (dashboard.scoreHistory.length > 5) {
-      dashboard.scoreHistory = dashboard.scoreHistory.slice(-5);
+    if (dashboard.scoreHistory.length > 6) {
+      dashboard.scoreHistory = dashboard.scoreHistory.slice(-6);
     }    
 
     await dashboard.save();

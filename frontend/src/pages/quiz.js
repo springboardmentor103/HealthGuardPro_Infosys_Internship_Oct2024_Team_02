@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { data } from '../data/data.js'; // Ensure data structure for physical fitness questions
+import endpoints from '../config/apiConfig';
+import AuthContext from '../context/AuthContext';
+import axios from 'axios';
 import '../styles/quiz.css';
 
 function QuizPage() {
@@ -20,6 +23,8 @@ function QuizPage() {
   const questions = data[currentCategory];
   const question = questions[index];
   
+  const { token } = useContext(AuthContext);
+  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     if (showPopup) {
@@ -51,50 +56,63 @@ function QuizPage() {
     setSelectedOption(option);
   };
 
-  const incrementIndex = () => {
+  const incrementIndex = async () => {
     if (!selectedOption) {
       setErrorMessage('Please answer this question before proceeding.');
       return;
     }
 
+    const newIndex = index + 1;
+    if (newIndex < questions.length) {
+      setSelectedOption(null);
+      setIndex(newIndex);
+    } else if (currentCategoryIndex + 1 < categories.length) {
+      setCurrentCategoryIndex((prevCategoryIndex) => prevCategoryIndex + 1);
+      setIndex(0);
+    } else {
+      // Final calculation and API call
+      const totalPossibleScore = categories.reduce(
+        (acc, category) => acc + data[category].length * 10, // Each question is worth 10 marks
+        0
+      );
 
-    setIndex((prevIndex) => {
-      const newIndex = prevIndex + 1;
-      if (newIndex < questions.length) {
-        setSelectedOption(null);
-        return newIndex;
-      } else {
-        if (currentCategoryIndex + 1 < categories.length) {
-          setCurrentCategoryIndex((prevCategoryIndex) => prevCategoryIndex + 1);
-          setIndex(0);
+      const scoreObtained = userAnswers.reduce((acc, answer) => acc + answer.score, 0);
+      const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100);
+
+      localStorage.setItem('Physical FitnessScore', percentage);
+
+      const payload = {
+        userId,
+        quizCategory: 'physicalFitness',
+        score: percentage,
+      };
+
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const response = await axios.post(endpoints.updateScores, payload, config);
+
+        if (response.status === 200) {
+          toast.success('Score submitted successfully!');
         } else {
-          // Calculate the Total Possible Score and Score Obtained
-          const totalPossibleScore = categories.reduce(
-            (acc, category) => acc + data[category].length * 10, // Each question is worth 10 marks
-            0
-          );
-    
-          const scoreObtained = userAnswers.reduce(
-            (acc, answer) => acc + answer.score, // Sum of scores for each correct answer
-            0
-          );
-    
-          // Calculate percentage using the formula: (Score Obtained / Total Possible Score) * 100
-          const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); // Rounded to the nearest integer
-    
-          // Save the final score in localStorage
-          localStorage.setItem('Physical FitnessScore', percentage);
-    
-          setShowPopup(true);
-    
-          // Redirect to dashboard after 2 seconds
-          setTimeout(() => {
-            navigate('/'); // Navigate to the dashboard page
-          }, 2000);
+          toast.error('Failed to submit score to the backend.');
         }
-        return prevIndex;
+      } catch (error) {
+        console.error('Error during API call:', error);
+        toast.error('An error occurred while submitting the score.');
       }
-    });
+
+      setShowPopup(true);
+
+      setTimeout(() => {
+        navigate('/'); // Navigate to the dashboard page
+      }, 2000);
+    }
   };
 
   return (
