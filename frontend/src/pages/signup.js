@@ -141,6 +141,9 @@ function Signup() {
           Already have an account? <Link to="/login">Log In</Link>
         </p>
       </div>
+      <div className="signup-toast-wrapper">
+        <ToastContainer autoClose={3000} />
+      </div>
     </div>
   );
 }
