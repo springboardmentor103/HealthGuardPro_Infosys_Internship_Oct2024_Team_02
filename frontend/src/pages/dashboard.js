@@ -44,7 +44,14 @@ const Dashboard = () => {
   
       if (response.status === 200) {
         const { quizScores, imageUrl, scoreHistory } = response.data;
-  
+        
+        setScores({
+          "Physical Fitness": quizScores.physicalFitness || 0,
+          "Nutrition": quizScores.nutrition || 0,
+          "Mental Well-Being": quizScores.mentalWellBeing || 0,
+          "Lifestyle": quizScores.lifestyle || 0,
+          "Bio Markers": quizScores.bioMarkers || 0,
+        });
         // Set the profile image URL
         setProfileImage(imageUrl || defaultImage);
   
