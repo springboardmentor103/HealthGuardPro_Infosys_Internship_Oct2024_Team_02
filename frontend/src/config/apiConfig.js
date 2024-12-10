@@ -11,6 +11,13 @@ const endpoints = {
   verifyOtp: `${API_BASE_URL}/otp/verify-otp`,       
   resendOtp: `${API_BASE_URL}/otp/resend-otp`,       
   changePassword: `${API_BASE_URL}/auth/change-password`, 
+  // Dashboard
+  fetchDashboard: (userId) => `${API_BASE_URL}/dashboard/${userId}`,
+  updateScores: `${API_BASE_URL}/dashboard/update-scores`,
+  uploadImage: `${API_BASE_URL}/dashboard/upload-image`,
+
+  // Other features
+  leaderboard: `${API_BASE_URL}/leaderboard`, // Example endpoint for leaderboard
 };
 
 export default endpoints;

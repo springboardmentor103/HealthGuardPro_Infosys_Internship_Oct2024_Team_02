@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from "react";
+import React, { useState, useEffect, useMemo, useContext,useCallback } from "react";
 import { ToastContainer, toast } from "react-toastify";  // Keep this import
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Confetti from "react-confetti";
 import AuthContext from "../context/AuthContext";
+import axios from "axios";
+import endpoints from "../config/apiConfig";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
@@ -17,9 +19,9 @@ const Dashboard = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [scores, setScores] = useState({
     "Physical Fitness": null,
-    Nutrition: null,
+    "Nutrition": null,
     "Mental Well-Being": null,
-    Lifestyle: null,
+    "Lifestyle": null,
     "Bio Markers": null,
   });
   const [showConfetti, setShowConfetti] = useState(false);
@@ -28,16 +30,49 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   // Retrieve full name from localStorage
-  const fullName = localStorage.getItem("userFullName") || "User";
+  const fullName = localStorage.getItem("userName") || "User";
+  const { token } = useContext(AuthContext);
+  const userId = localStorage.getItem("userId");
+
+  const fetchDashboardData = useCallback(async () => {
+    try {
+      const response = await axios.get(endpoints.fetchDashboard(userId), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.status === 200) {
+        const { quizScores, imageUrl, scoreHistory } = response.data;
+  
+        // Set the profile image URL
+        setProfileImage(imageUrl || defaultImage);
+  
+        // Update score history if needed
+        // (handle or log scoreHistory as per requirements)
+      } else {
+        toast.error("Failed to fetch dashboard data.");
+      }
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error.message);
+      toast.error("Error loading dashboard data. Please try again.");
+    }
+  }, [userId, token]); // Dependencies for useCallback
+  
+  // Updated useEffect
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]); 
 
   const data = useMemo(() => [
-    { title: "Physical Fitness", description: "Overall Score", route: "/quiz" },
-    { title: "Nutrition", description: "Overall Score", route: "/nutritionquiz" },
-    { title: "Mental Well-Being", description: "Last week avg scoring", route: "/mentalquiz" },
-    { title: "Lifestyle", description: "Last week avg scoring", route: "/lifestylequiz" },
-    { title: "Bio Markers", description: "Last week avg scoring", route: "/biomarkersquiz", colSpan: true },
-    { title: "Overall Score", description: "Overall Score", isBottom: true, colSpan: true },
+    { title: "Physical Fitness", description: "Fitness Score", route: "/quiz" },
+    { title: "Nutrition", description: "Nutrition Score", route: "/nutritionquiz" },
+    { title: "Mental Well-Being", description: "Mental Health Score", route: "/mentalquiz" },
+    { title: "Lifestyle", description: "Lifestyle Score", route: "/lifestylequiz" },
+    { title: "Bio Markers", description: "Health Indicators", route: "/biomarkersquiz", colSpan: true },
+    { title: "Overall Score", description: "Combined Results", isBottom: true, colSpan: true },
   ], []);
+  
 
   const scoreHistory = [
     { id: 1, timeStamp: "2024-11-18 10:00 AM", overallScore: "95%" },
@@ -47,41 +82,93 @@ const Dashboard = () => {
     { id: 5, timeStamp: "2024-11-14 11:30 AM", overallScore: "63%" },
   ];
 
+
   const handleViewBoard = (id) => {
     console.log(`View Board clicked for ID: ${id}`);
     // Add navigation or modal logic here
   };
   
 
-  const handleImageChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "healthguard_pro");
+const handleImageChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
 
-    try {
-      const res = await fetch(
-        "https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload",
-        {
-          method: "POST",
-          body: data,
-        }
-      );
+  const data = new FormData();
+  data.append("file", file);
+  data.append("upload_preset", "healthguard_pro");
 
-      if (!res.ok) {
-        throw new Error("Failed to upload the image.");
+  try {
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload",
+      {
+        method: "POST",
+        body: data,
       }
+    );
 
-      const uploadedImage = await res.json();
-      setProfileImage(uploadedImage.secure_url);
-    } catch (error) {
-      console.error("Error uploading image:", error.message);
-      alert("Image upload failed. Please try again.");
+    if (!res.ok) {
+      throw new Error("Failed to upload the image.");
     }
-  };
 
-  const handleDeleteImage = () => {
+    const uploadedImage = await res.json();
+    const imageUrl = uploadedImage.secure_url;
+
+
+    // Send imageUrl to backend
+    const payload = {
+      userId,
+      imageUrl,
+    };
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axios.post(endpoints.uploadImage, payload, config);
+
+    if (response.status === 200) {
+      toast.success("Profile image updated successfully!");
+      setProfileImage(imageUrl);
+      setShowOptions(false);
+    } else {
+      throw new Error("Failed to send image URL to backend.");
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    toast.error("Image upload or update failed. Please try again.");
+  }
+};
+
+  const handleDeleteImage = async() => {
+    try{
+      const imageUrl = defaultImage;
+      const payload = {
+        userId,
+        imageUrl,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await axios.post(endpoints.uploadImage, payload, config);
+
+      if (response.status === 200) {
+        toast.success("Profile image updated successfully!");
+      } else {
+        throw new Error("Failed to send image URL to backend.");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error("Image upload or update failed. Please try again.");
+    }
+
     setProfileImage(defaultImage);
     setShowOptions(false);
   };
@@ -120,7 +207,13 @@ const Dashboard = () => {
     );
   };
   
-
+  const categoryMapping = {
+    "Physical Fitness": "physicalFitness",
+    "Nutrition": "nutrition",
+    "Mental Well-Being": "mentalWellBeing",
+    "Lifestyle": "lifestyle",
+    "Bio Markers": "bioMarkers",
+  };
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
       console.log("No action for Overall Score card");
@@ -129,29 +222,15 @@ const Dashboard = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      // Simulate a score update
-      const randomScore = Math.floor(Math.random() * 101);
-      localStorage.setItem(`${title}Score`, randomScore);
       handleScoreUpdate(title); // Update the score dynamically
       navigate(route); // Make sure navigate is called once
     }, 2000);
   };
 
-  /*const retrieveScores = () => {
-    const updatedScores = { ...scores };
-    Object.keys(scores).forEach((key) => {
-      const storedScore = localStorage.getItem(`${key.toLowerCase().replace(/\s/g, '')}Score`);
-      updatedScores[key] = storedScore ? parseInt(storedScore, 10) : 0;
-    });
-    setScores(updatedScores);
-  };
-
-  useEffect(() => {
-    retrieveScores();
-  },[]);*/
-
   const handleScoreUpdate = (category) => {
     const savedScore = localStorage.getItem(`${category}Score`);
+    // console.log(category);
+    // console.log("savedscore: "+savedScore);
     if (savedScore) {
       setScores((prevScores) => ({
         ...prevScores,
@@ -159,6 +238,9 @@ const Dashboard = () => {
       }));
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000); // Confetti duration
+
+      
+
     }
   };
 

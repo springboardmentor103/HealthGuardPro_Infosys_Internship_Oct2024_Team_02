@@ -50,7 +50,7 @@ const Leaderboard = () => {
       <div className="top-section">
         {/* Background Image */}
         <img
-          src="https://s3-alpha-sig.figma.com/img/98d3/ca01/1baa592b8cb8f08b29efa9356a908d0e?Expires=1733097600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=BGpZMYUWZrMc0~WYDNIFeXmrLyb11L2bQ6oATGyOfipPCtRkmhJHva8Ay5ufvWfX-J2VONn4ySUm6gi9ZcYjDiuOSn~mwiBbd2DrUwHCE7Ou30r4USOxYcSBPI8WiZGVd5nz-S60HHEcaXGRG6RMy0TpA4CZb7gLtndFcTRjctqqFGiRiIfg3xAa7oyr945MIIfXHmxVy0ucZsYFcRvOfXeRHRHs~wXC5eRsuBtWL8tWCqWgCjHYF5RBkxBStjqxf5CFbV1OAIjFSx6vSaYppfwawfKMtfYbIqxKLjHGWhnHCoIRYAz-7hJcntX-xhdzwog0XqNyxehngW96TCy~nA__"
+          src="https://res.cloudinary.com/ddfwslkx0/image/upload/v1733582960/how-quickly-can-you-get-in-shape-expert-insights-and-tips_zchdhg.webp"
           alt="Park Background"
           className="background-image"
         />
