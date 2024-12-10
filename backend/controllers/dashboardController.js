@@ -77,7 +77,7 @@ const updateQuizScores = async (req, res) => {
     const scores = Object.values(quizCategories).filter((value) => typeof value === "number" && value > 0);
 
     // Compute average of non-zero quiz scores
-    dashboard.quizScores.overallScore = scores.reduce((acc, val) => acc + val, 0) /scores.length;
+    dashboard.quizScores.overallScore = scores.reduce((acc, val) => acc + val, 0) /5;
 
     dashboard.scoreHistory.push({
       scores: { ...dashboard.quizScores },
