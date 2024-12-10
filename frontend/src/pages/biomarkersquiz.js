@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { data } from '../data/biodata.js'; // Make sure you have your data structure here
-import '../styles/quiz.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { data } from "../data/biodata.js"; // Make sure you have your data structure here
+import "../styles/quiz.css";
 
 function BiomarkerQuizPage() {
   const categories = Object.keys(data);
@@ -12,7 +12,7 @@ function BiomarkerQuizPage() {
   const [userAnswers, setUserAnswers] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
@@ -22,22 +22,28 @@ function BiomarkerQuizPage() {
 
   useEffect(() => {
     if (showPopup) {
-      document.body.classList.add('popup-active');
+      document.body.classList.add("popup-active");
     } else {
-      document.body.classList.remove('popup-active');
+      document.body.classList.remove("popup-active");
     }
   }, [showPopup]);
 
   const handleOptionClick = (option, score) => {
     console.log(`Option selected: ${option}, Score: ${score}`); // Log the selected option and its score
-    setErrorMessage('');
-    const existingAnswerIndex = userAnswers.findIndex((ans) => ans.questionId === question.id);
-  
+    setErrorMessage("");
+    const existingAnswerIndex = userAnswers.findIndex(
+      (ans) => ans.questionId === question.id
+    );
+
     if (existingAnswerIndex !== -1) {
       const updatedAnswers = [...userAnswers];
       const oldScore = updatedAnswers[existingAnswerIndex].score;
-      updatedAnswers[existingAnswerIndex] = { questionId: question.id, answer: option, score };
-  
+      updatedAnswers[existingAnswerIndex] = {
+        questionId: question.id,
+        answer: option,
+        score,
+      };
+
       setTotalScore((prevScore) => {
         const newScore = prevScore - oldScore + score;
         console.log(`Updated Total Score: ${newScore}`); // Log the total score
@@ -55,19 +61,15 @@ function BiomarkerQuizPage() {
         return newScore;
       });
     }
-  
+
     setSelectedOption(option);
   };
-  
-  
 
   const incrementIndex = () => {
     if (!selectedOption) {
-      setErrorMessage('Please answer this question before proceeding.');
+      setErrorMessage("Please answer this question before proceeding.");
       return;
     }
-
-    
 
     setIndex((prevIndex) => {
       const newIndex = prevIndex + 1;
@@ -84,34 +86,36 @@ function BiomarkerQuizPage() {
             (acc, category) => acc + data[category].length * 10, // Each question is worth 10 marks
             0
           );
-    
+
           const scoreObtained = userAnswers.reduce(
             (acc, answer) => acc + answer.score, // Sum of scores for each correct answer
             0
           );
           console.log(scoreObtained);
           console.log(totalPossibleScore);
-    
+
           // Calculate percentage using the formula: (Score Obtained / Total Possible Score) * 100
-          const percentage = Math.floor((scoreObtained / totalPossibleScore) * 100); 
+          const percentage = Math.floor(
+            (scoreObtained / totalPossibleScore) * 100
+          );
           console.log(percentage);
-    
+
           // Save the final score in localStorage
-          localStorage.setItem('biomarkerScore', percentage);
-    
+          localStorage.setItem("biomarkerScore", percentage);
+
+          // Add this line to set the confetti flag
+          localStorage.setItem("showConfetti", "true");
+
           setShowPopup(true);
-    
+
           // Redirect to dashboard after 2 seconds
           setTimeout(() => {
-            navigate('/'); // Navigate to the dashboard page
+            navigate("/"); // Navigate to the dashboard page
           }, 2000);
         }
         return prevIndex;
       }
     });
-    
-    
-    
   };
 
   return (
@@ -128,7 +132,9 @@ function BiomarkerQuizPage() {
           {question.options.map((option, idx) => (
             <button
               key={idx}
-              className={`option-button ${selectedOption === option.text ? 'selected' : ''}`}
+              className={`option-button ${
+                selectedOption === option.text ? "selected" : ""
+              }`}
               onClick={() => handleOptionClick(option.text, option.score)}
             >
               {option.text}
@@ -137,15 +143,18 @@ function BiomarkerQuizPage() {
         </div>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <button className="submit-button" onClick={incrementIndex}>
-          {index + 1 === questions.length && currentCategoryIndex + 1 === categories.length
-            ? 'SUBMIT'
-            : 'NEXT'}
+          {index + 1 === questions.length &&
+          currentCategoryIndex + 1 === categories.length
+            ? "SUBMIT"
+            : "NEXT"}
         </button>
         <div className="progress-bar-container">
           <div
             className="progress-bar"
             style={{
-              width: `${(totalScore / (categories.length * questions.length * 10)) * 100}%`,
+              width: `${
+                (totalScore / (categories.length * questions.length * 10)) * 100
+              }%`,
             }}
           ></div>
         </div>
@@ -156,7 +165,10 @@ function BiomarkerQuizPage() {
           <div className="popup-content">
             <h2>Congratulations!</h2>
             <p>You have completed the quiz!</p>
-            <img src="https://cdn-icons-png.flaticon.com/128/7480/7480607.png" alt="Celebration" />
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/7480/7480607.png"
+              alt="Celebration"
+            />
           </div>
         </div>
       )}
@@ -167,4 +179,3 @@ function BiomarkerQuizPage() {
 }
 
 export default BiomarkerQuizPage;
-

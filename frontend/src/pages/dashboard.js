@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo, useContext } from "react";
-import { ToastContainer, toast } from "react-toastify";  // Keep this import
+import { ToastContainer, toast } from "react-toastify"; // Keep this import
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import Confetti from "react-confetti";
 import AuthContext from "../context/AuthContext";
 import "../styles/dashboard.css";
+import Confetti from "react-confetti";
 
 const Dashboard = () => {
   const defaultImage =
@@ -30,14 +30,43 @@ const Dashboard = () => {
   // Retrieve full name from localStorage
   const fullName = localStorage.getItem("userFullName") || "User";
 
-  const data = useMemo(() => [
-    { title: "Physical Fitness", description: "Overall Score", route: "/quiz" },
-    { title: "Nutrition", description: "Overall Score", route: "/nutritionquiz" },
-    { title: "Mental Well-Being", description: "Last week avg scoring", route: "/mentalquiz" },
-    { title: "Lifestyle", description: "Last week avg scoring", route: "/lifestylequiz" },
-    { title: "Bio Markers", description: "Last week avg scoring", route: "/biomarkersquiz", colSpan: true },
-    { title: "Overall Score", description: "Overall Score", isBottom: true, colSpan: true },
-  ], []);
+  const data = useMemo(
+    () => [
+      {
+        title: "Physical Fitness",
+        description: "Overall Score",
+        route: "/quiz",
+      },
+      {
+        title: "Nutrition",
+        description: "Overall Score",
+        route: "/nutritionquiz",
+      },
+      {
+        title: "Mental Well-Being",
+        description: "Last week avg scoring",
+        route: "/mentalquiz",
+      },
+      {
+        title: "Lifestyle",
+        description: "Last week avg scoring",
+        route: "/lifestylequiz",
+      },
+      {
+        title: "Bio Markers",
+        description: "Last week avg scoring",
+        route: "/biomarkersquiz",
+        colSpan: true,
+      },
+      {
+        title: "Overall Score",
+        description: "Overall Score",
+        isBottom: true,
+        colSpan: true,
+      },
+    ],
+    []
+  );
 
   const scoreHistory = [
     { id: 1, timeStamp: "2024-11-18 10:00 AM", overallScore: "95%" },
@@ -51,7 +80,6 @@ const Dashboard = () => {
     console.log(`View Board clicked for ID: ${id}`);
     // Add navigation or modal logic here
   };
-  
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
@@ -97,7 +125,7 @@ const Dashboard = () => {
                 className="confirm-button"
                 onClick={() => {
                   toast.dismiss(t.id);
-                  logout();  // Call logout function here
+                  logout(); // Call logout function here
                   navigate("/login"); // Navigate to login page after logout
                 }}
               >
@@ -119,7 +147,6 @@ const Dashboard = () => {
       }
     );
   };
-  
 
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
@@ -157,8 +184,6 @@ const Dashboard = () => {
         ...prevScores,
         [category]: parseInt(savedScore, 10),
       }));
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 5000); // Confetti duration
     }
   };
 
@@ -193,11 +218,26 @@ const Dashboard = () => {
     });
   }, [data]);
 
-return (
+  useEffect(() => {
+    if (localStorage.getItem("showConfetti") === "true") {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 5000);
+    }
+  }, []);
+
+  return (
     <div className="dashboard">
       {loading && (
         <div className="loader-overlay">
-          <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "20vh" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "20vh",
+            }}
+          >
             <CircularProgress color="success" />
             <p style={{ marginTop: "20px" }}>Loading... Please wait</p>
           </Box>
@@ -226,16 +266,31 @@ return (
 
       <div className="profile-section">
         <div className="profile-container">
-          <div className="profile-image-background" onClick={() => setShowOptions(!showOptions)}>
+          <div
+            className="profile-image-background"
+            onClick={() => setShowOptions(!showOptions)}
+          >
             <img className="profile-image" src={profileImage} alt="Profile" />
           </div>
-          <input type="file" id="file-input" style={{ display: "none" }} accept="image/*" onChange={handleImageChange} />
+          <input
+            type="file"
+            id="file-input"
+            style={{ display: "none" }}
+            accept="image/*"
+            onChange={handleImageChange}
+          />
           {showOptions && (
             <div className="profile-options">
-              <button onClick={() => document.getElementById("file-input").click()} className="profile-option-btn">
+              <button
+                onClick={() => document.getElementById("file-input").click()}
+                className="profile-option-btn"
+              >
                 Update
               </button>
-              <button onClick={handleDeleteImage} className="profile-option-btn">
+              <button
+                onClick={handleDeleteImage}
+                className="profile-option-btn"
+              >
                 Delete
               </button>
             </div>
@@ -272,7 +327,11 @@ return (
               <div
                 className="progress"
                 style={{
-                  width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`
+                  width: `${
+                    item.title === "Overall Score"
+                      ? overallScore
+                      : scores[item.title] || 0
+                  }%`,
                 }}
               ></div>
             </div>
@@ -297,7 +356,10 @@ return (
               <td>{item.timeStamp}</td>
               <td>{item.overallScore}</td>
               <td>
-                <button className="view-button" onClick={() => handleViewBoard(item.id)}>
+                <button
+                  className="view-button"
+                  onClick={() => handleViewBoard(item.id)}
+                >
                   View
                 </button>
               </td>
