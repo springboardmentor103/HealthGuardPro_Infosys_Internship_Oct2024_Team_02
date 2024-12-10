@@ -1,25 +1,26 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-//import { toast } from "react-toastify";
+import React, { useState, useEffect,useContext } from "react";
+import { useNavigate,Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import endpoints from "../config/apiConfig";
+import AuthContext from "../context/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/leaderboard.css";
 
-const leaderboardData = [
-  { name: "Aurelia T. Voss", rank: 1, image: "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733584479/Kayla-Person_lmw1h6.jpg", isTop: true },
-  { name: "Jaxon Y. Sterling", rank: 2, image: "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733584645/depositphotos_202216884-stock-photo-portrait-year-old-man-relaxing_kncf04.webp" },
-  { name: "Kael C. Mercer", rank: 3, image: "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733584703/woman-mobile-camera-home-emotion-person-selfie-blogger-phone-smartphone-photo_yvpbn8.jpg" },
-  { name: "Maren X. Kline", rank: 4, image: "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733584577/pexels-photo-1239291_vthw6f.jpg" },
-  { name: "Dario P. Keane", rank: 5, image: "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733584780/-Type-Of-Person-_spm1x7.webp" },
-];
-
 const Leaderboard = () => {
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [userData, setUserData] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const [showToast, setShowToast] = useState(false);
+  const navigate = useNavigate();
 
+  const { token } = useContext(AuthContext);
+
+  // Toggle menu visibility
   const toggleMenu = () => setIsMenuOpen((prevState) => !prevState);
   const closeMenu = () => setIsMenuOpen(false);
 
+  // Handle logout functionality
   const handleLogout = () => {
     setShowToast(true);
   };
@@ -32,11 +33,32 @@ const Leaderboard = () => {
   const cancelLogout = () => {
     setShowToast(false);
   };
-  
 
-  const filteredData = leaderboardData
-    .filter((user) => !user.isTop)
-    .map((user, index) => ({ ...user, rank: index + 2 }));
+  // Fetch leaderboard data on component mount
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await axios.get(endpoints.leaderboard, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Replace with the token as needed
+          },
+        });
+        const { leaderboard, userData } = response.data;
+        setLeaderboardData(leaderboard);
+        setUserData(userData);
+      } catch (error) {
+        console.error("Error fetching leaderboard data", error);
+        toast.error("Failed to load leaderboard data.");
+      }
+    };
+
+    fetchLeaderboard();
+  }, []);
+
+  // Ensure leaderboard is ready
+  if (!leaderboardData.length || !userData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="leaderboard-container">
@@ -68,12 +90,12 @@ const Leaderboard = () => {
         <div className="blur-overlay"></div>
         <div className="top-user">
           <img
-            src={leaderboardData[0].image}
-            alt={leaderboardData[0].name}
+            src={userData.image}
+            alt={userData.name}
             className="top-profile-image"
           />
-          <h2 className="top-name">{leaderboardData[0].name}</h2>
-          <p className="top-rank">#1</p>
+          <h2 className="top-name">{userData.name}</h2>
+          <p className="top-rank">#{userData.rank}</p>
         </div>
       </div>
 
@@ -83,10 +105,14 @@ const Leaderboard = () => {
           <h3>Leaderboard</h3>
           <h3>Rank</h3>
         </div>
-        {filteredData.map((user) => (
+        {leaderboardData.slice(0, 11).map((user) => ( // Display top 10, excluding the current user (index 0)
           <div className="list-item" key={user.rank}>
             <div className="user-info">
-              <img src={user.image} alt={user.name} className="list-profile-image" />
+              <img
+                src={user.image}
+                alt={user.name}
+                className="list-profile-image"
+              />
               <p className="user-name">{user.name}</p>
             </div>
             <p className="user-rank">{user.rank}</p>
@@ -116,4 +142,3 @@ const Leaderboard = () => {
 };
 
 export default Leaderboard;
-    
