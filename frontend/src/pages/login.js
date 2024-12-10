@@ -50,7 +50,7 @@ function LoginPage() {
 
       if (response.ok) {
         toast.success('Login successful!');
-        login(data.token); // Save token and set authenticated state via AuthContext
+        login(data.token,data._id,data.name); // Save token and set authenticated state via AuthContext
         setTimeout(() => {
           navigate('/dashboard'); 
         }, 1000);

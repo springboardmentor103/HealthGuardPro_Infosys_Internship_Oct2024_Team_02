@@ -70,7 +70,7 @@ function App() {
             }
           />
           <Route
-            path="/lifequiz"
+            path="/lifestylequiz"
             element={
               <ProtectedRoute>
                 <LifestyleQuizPage />
