@@ -108,6 +108,8 @@ function MentalwellQuizPage() {
       }
 
       setShowPopup(true);
+            localStorage.setItem("quizCompleted", "true");
+
 
       setTimeout(() => {
         navigate('/'); // Navigate to the dashboard page
