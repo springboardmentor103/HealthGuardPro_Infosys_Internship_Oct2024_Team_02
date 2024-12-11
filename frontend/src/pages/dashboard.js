@@ -431,9 +431,13 @@ return (
             <p>{item.description}</p>
             <div className="progress-bar">
               <div
-                className="progress"
+                className={`progress ${
+                  (item.title === "Overall Score" ? overallScore : scores[item.title]) === 100
+                    ? "curved-end"
+                    : ""
+                }`}
                 style={{
-                  width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`
+                  width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`,
                 }}
               ></div>
             </div>
