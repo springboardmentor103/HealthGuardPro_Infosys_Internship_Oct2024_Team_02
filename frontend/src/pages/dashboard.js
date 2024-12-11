@@ -59,10 +59,19 @@ const Dashboard = () => {
     }
   }, [userId, token]); // Dependencies for useCallback
   
-  // Updated useEffect
+
   useEffect(() => {
     fetchDashboardData();
-  }, [fetchDashboardData]); 
+
+    // Check for quiz completion flag
+    if (localStorage.getItem("quizCompleted") === "true") {
+      setShowConfetti(true);
+      localStorage.removeItem("quizCompleted"); // Remove the flag
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 3000);
+    }
+  }, [fetchDashboardData]);
 
   const data = useMemo(() => [
     { title: "Physical Fitness", description: "Fitness Score", route: "/quiz" },
@@ -236,8 +245,7 @@ const handleImageChange = async (event) => {
         ...prevScores,
         [category]: parseInt(savedScore, 10),
       }));
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 5000); // Confetti duration
+      
 
       
 
