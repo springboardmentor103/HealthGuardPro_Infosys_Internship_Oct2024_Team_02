@@ -98,7 +98,11 @@ function LoginPage() {
           Don't have an account? <Link to="/signup">Sign Up</Link>
         </p>
       </div>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <div className="login-toast-wrapper">
+        <ToastContainer autoClose={3000} />
+      </div>
+
+
     </div>
   );
 }

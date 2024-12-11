@@ -103,6 +103,9 @@ const ResetPassword = () => {
       <button className="reset-button" onClick={handleResetPassword}>
         Reset
       </button>
+      <div className="signup-toast-wrapper">
+        <ToastContainer autoClose={3000} />
+      </div>
     </div>
   );
 };

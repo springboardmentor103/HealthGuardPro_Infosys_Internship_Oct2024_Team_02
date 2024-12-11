@@ -60,7 +60,9 @@ const ForgotPassword = () => {
       <button className="reset-button" id="reset-button" onClick={handleResetClick}>
         Send OTP
       </button>
-      <ToastContainer />
+      <div className="forgot-toast-wrapper">
+        <ToastContainer autoClose={3000} />
+      </div>
     </div>
   );
 };

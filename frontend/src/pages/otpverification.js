@@ -139,6 +139,9 @@ const OtpVerification = () => {
       >
         {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
       </button>
+      <div className="otp-toast-wrapper">
+        <ToastContainer autoClose={3000} />
+      </div>
     </div>
   );
 };

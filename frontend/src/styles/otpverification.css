@@ -157,6 +157,17 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.otp-toast-wrapper .Toastify__toast-container {
+  position: fixed;
+  top: -80%;
+  left: 20%;
+  z-index: 9999;
+}
+
+.otp-toast-wrapper .Toastify__toast {
+  margin-bottom: 0.5rem;
+}
+
 @keyframes errorShake {
   0% {
     transform: translateX(0);
