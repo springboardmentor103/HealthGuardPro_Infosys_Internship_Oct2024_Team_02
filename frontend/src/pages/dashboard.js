@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useContext,useCallback } from "rea
 import { ToastContainer, toast } from "react-toastify";  // Keep this import
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Confetti from "react-confetti";
@@ -25,6 +26,8 @@ const Dashboard = () => {
     "Bio Markers": null,
   });
   const [showConfetti, setShowConfetti] = useState(false);
+  const [currentView, setCurrentView] = useState(null);
+  const [scoreHistory, setScoreHistory] = useState([]);
 
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -44,10 +47,18 @@ const Dashboard = () => {
   
       if (response.status === 200) {
         const { quizScores, imageUrl, scoreHistory } = response.data;
-  
+
+        setScores({
+          "Physical Fitness": quizScores.physicalFitness || 0,
+          "Nutrition": quizScores.nutrition || 0,
+          "Mental Well-Being": quizScores.mentalWellBeing || 0,
+          "Lifestyle": quizScores.lifestyle || 0,
+          "Bio Markers": quizScores.bioMarkers || 0,
+        });
         // Set the profile image URL
         setProfileImage(imageUrl || defaultImage);
-  
+        setScoreHistory([...scoreHistory].reverse()); // Save fetched history
+        // console.log(scoreHistory);
         // Update score history if needed
         // (handle or log scoreHistory as per requirements)
       } else {
@@ -64,6 +75,12 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [fetchDashboardData]); 
 
+  const formatDate = (timestamp) => {
+    // return moment(timestamp).format("YYYY-MM-DD hh:mm A");
+    return moment(timestamp).format("hh:mm A DD-MM-YYYY");
+  };
+
+
   const data = useMemo(() => [
     { title: "Physical Fitness", description: "Fitness Score", route: "/quiz" },
     { title: "Nutrition", description: "Nutrition Score", route: "/nutritionquiz" },
@@ -74,20 +91,68 @@ const Dashboard = () => {
   ], []);
   
 
-  const scoreHistory = [
-    { id: 1, timeStamp: "2024-11-18 10:00 AM", overallScore: "95%" },
-    { id: 2, timeStamp: "2024-11-17 5:00 PM", overallScore: "86%" },
-    { id: 3, timeStamp: "2024-11-16 2:30 PM", overallScore: "75%" },
-    { id: 4, timeStamp: "2024-11-15 7:38 AM", overallScore: "100%" },
-    { id: 5, timeStamp: "2024-11-14 11:30 AM", overallScore: "63%" },
-  ];
 
 
-  const handleViewBoard = (id) => {
-    console.log(`View Board clicked for ID: ${id}`);
-    // Add navigation or modal logic here
+ const handleViewBoard = (index) => {
+    if (currentView === index) {
+      // Close view and reset current data
+      setCurrentView(null);
+      fetchDashboardData(); // Reset the scores to the latest
+    } else {
+      // View specific history
+      setCurrentView(index);
+      const selectedData = scoreHistory[index].scores;
+      setScores({
+        "Physical Fitness": selectedData.physicalFitness || 0,
+        "Nutrition": selectedData.nutrition || 0,
+        "Mental Well-Being": selectedData.mentalWellBeing || 0,
+        "Lifestyle": selectedData.lifestyle || 0,
+        "Bio Markers": selectedData.bioMarkers || 0,
+      });
+    }
   };
   
+
+  const renderScoreHistory = () => {
+    if (scoreHistory.length < 2) return null; // Don't display if history has less than 2 entries
+
+    const displayedHistory = 
+    scoreHistory.length === 5 ? scoreHistory.slice(1, 5) : scoreHistory.slice(1);// Reverse the entire history
+
+    return (
+      <div>
+        <h3 className="score-history-title">Score History</h3>
+        <table className="score-history-table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Time Stamp</th>
+              <th>Overall Score</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {displayedHistory.map((item, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{formatDate(item.timestamp)}</td>
+                <td>{Math.round(item.scores.overallScore)}%</td>
+                <td>
+                  <button
+                    className="view-button"
+                    onClick={() => handleViewBoard(index+1)}
+                  >
+                    {currentView === index ? "Close" : "View"}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
 
 const handleImageChange = async (event) => {
   const file = event.target.files[0];
@@ -207,13 +272,7 @@ const handleImageChange = async (event) => {
     );
   };
   
-  const categoryMapping = {
-    "Physical Fitness": "physicalFitness",
-    "Nutrition": "nutrition",
-    "Mental Well-Being": "mentalWellBeing",
-    "Lifestyle": "lifestyle",
-    "Bio Markers": "bioMarkers",
-  };
+  
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
       console.log("No action for Overall Score card");
@@ -362,31 +421,7 @@ return (
         ))}
       </div>
 
-      <h3 className="score-history-title">Score History</h3>
-      <table className="score-history-table">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Time Stamp</th>
-            <th>Overall Score</th>
-            <th>View Board</th>
-          </tr>
-        </thead>
-        <tbody>
-          {scoreHistory.slice(0, 5).map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.timeStamp}</td>
-              <td>{item.overallScore}</td>
-              <td>
-                <button className="view-button" onClick={() => handleViewBoard(item.id)}>
-                  View
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+       {renderScoreHistory()}
 
       <ToastContainer />
     </div>
