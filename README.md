@@ -1,6 +1,4 @@
 # HealthGuardPro_Infosys_Internship_Oct2024_Team_02
-Here we will track the health status of the user.
-# HealthGuardPro_Infosys_Internship_Oct2024_Team_02
 
 Here we will track the health status of the user.
 
@@ -126,6 +124,29 @@ HealthGuard Pro is a health tracking application that allows users to sign up, l
     }
     ```
 
+### Health Tracking
+
+- **Endpoint**: `/api/health/tracking`
+- **Method**: POST
+- **Description**: Records user's health metrics
+- **Request Body**:
+    ```json
+    {
+        "userId": "user123",
+        "heartRate": 75,
+        "bloodPressure": "120/80",
+        "temperature": 98.6,
+        "timestamp": "2024-02-20T10:00:00Z"
+    }
+    ```
+
+### Health History
+
+- **Endpoint**: `/api/health/history`
+- **Method**: GET
+- **Description**: Retrieves user's health history
+- **Query Parameters**: `userId`, `startDate`, `endDate`
+
 ## Frontend Components
 
 ### Login Page
@@ -153,6 +174,21 @@ HealthGuard Pro is a health tracking application that allows users to sign up, l
 - **File**: `frontend/src/pages/resetpassword.js`
 - **Description**: Renders the reset password form and handles password resetting.
 
+### Health Dashboard
+
+- **File**: `frontend/src/pages/dashboard.js`
+- **Description**: Main dashboard showing health metrics and graphs
+
+### Health Metrics Form
+
+- **File**: `frontend/src/components/healthMetricsForm.js`
+- **Description**: Form for entering health measurements
+
+### Health History View
+
+- **File**: `frontend/src/components/healthHistory.js`
+- **Description**: Component for viewing historical health data
+
 ## Styling
 
 The application uses CSS for styling. The styles are organized in the `frontend/src/styles` directory.
@@ -164,6 +200,9 @@ The application uses CSS for styling. The styles are organized in the `frontend/
 - **Forgot Password Page Styles**: `frontend/src/styles/forgotpassword.css`
 - **OTP Verification Page Styles**: `frontend/src/styles/otpverification.css`
 - **Reset Password Page Styles**: `frontend/src/styles/resetpassword.css`
+- **Dashboard Styles**: `frontend/src/styles/dashboard.css`
+- **Health Metrics Styles**: `frontend/src/styles/healthMetrics.css`
+- **Charts Styles**: `frontend/src/styles/charts.css`
 
 ## Testing
 
@@ -175,3 +214,6 @@ To run the tests, navigate to the `frontend` directory and run:
 
 ```sh
 npm test
+## License
+
+This project is licensed under the MIT License.

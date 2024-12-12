@@ -1,91 +1,288 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import { useNavigate } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect, useMemo, useContext,useCallback } from "react";
+import { ToastContainer, toast } from "react-toastify";  // Keep this import
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import Confetti from "react-confetti";
+import AuthContext from "../context/AuthContext";
+import axios from "axios";
+import endpoints from "../config/apiConfig";
 import "../styles/dashboard.css";
-// import { Navigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const defaultImage =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLdIEENaWqGZV9kxR871g9p6ywGNnqvbyd3z-3MoYMi-Fc6WZvtU7wE68_RHCBINkRjl4&usqp=CAU";
+    "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733317585/images_iwucqp.png";
 
   const [profileImage, setProfileImage] = useState(defaultImage);
+  const [loading, setLoading] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [loading, setLoading] = useState(false); 
+  const [scores, setScores] = useState({
+    "Physical Fitness": null,
+    "Nutrition": null,
+    "Mental Well-Being": null,
+    "Lifestyle": null,
+    "Bio Markers": null,
+  });
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [currentView, setCurrentView] = useState(null);
+  const [scoreHistory, setScoreHistory] = useState([]);
 
-  // const [showOptions, setShowOptions] = useState(false); 
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const data = [
-    { title: "Physical Fitness", score: "95%", description: "Overall Score", route: "/physical-fitness" },
-    { title: "Nutrition", score: "95%", description: "Overall Score", route: "/nutrition" },
-    { title: "Mental Well-Being", score: "95%", description: "Last week avg scoring", route: "/mental-wellness" },
-    { title: "Lifestyle", score: "95%", description: "Last week avg scoring", route: "/lifestyle" },
-    { title: "Bio Markers", score: "95%", description: "Last week avg scoring", route: "/bio-markers" },
-    { title: "Overall Score", score: "75%", description: "Overall Score", isBottom: true },
-  ];
 
-  const scoreHistory = [
-    { id: 1, timeStamp: "2024-11-18 10:00 AM", overallScore: "95%" },
-    { id: 2, timeStamp: "2024-11-17 5:00 PM", overallScore: "86%" },
-    { id: 3, timeStamp: "2024-11-16 2:30 PM", overallScore: "75%" },
-  ];
+  // Retrieve full name from localStorage
+  const fullName = localStorage.getItem("userName") || "User";
+  const { token } = useContext(AuthContext);
+  const userId = localStorage.getItem("userId");
 
-  const handleImageChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "healthguard_pro");
-
+  const fetchDashboardData = useCallback(async () => {
     try {
-      const res = await fetch("https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload", {
-        method: "POST",
-        body: data,
+      const response = await axios.get(endpoints.fetchDashboard(userId), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+  
+      if (response.status === 200) {
+        const { quizScores, imageUrl, scoreHistory } = response.data;
 
-      if (!res.ok) {
-        throw new Error("Failed to upload the image. Please check your Cloudinary credentials and preset.");
+        setScores({
+          "Physical Fitness": quizScores.physicalFitness || 0,
+          "Nutrition": quizScores.nutrition || 0,
+          "Mental Well-Being": quizScores.mentalWellBeing || 0,
+          "Lifestyle": quizScores.lifestyle || 0,
+          "Bio Markers": quizScores.bioMarkers || 0,
+        });
+        // Set the profile image URL
+        setProfileImage(imageUrl || defaultImage);
+        setScoreHistory([...scoreHistory].reverse()); // Save fetched history
+        // console.log(scoreHistory);
+        // Update score history if needed
+        // (handle or log scoreHistory as per requirements)
+      } else {
+        toast.error("Failed to fetch dashboard data.");
       }
-
-      const uploadedImage = await res.json();
-      setProfileImage(uploadedImage.secure_url); 
     } catch (error) {
-      console.error("Error uploading image:", error.message);
-      alert("Image upload failed. Please try again.");
+      console.error("Error fetching dashboard data:", error.message);
+      toast.error("Error loading dashboard data. Please try again.");
     }
+  }, [userId, token]); // Dependencies for useCallback
+  
+
+  useEffect(() => {
+    fetchDashboardData();
+
+    // Check for quiz completion flag
+    if (localStorage.getItem("quizCompleted") === "true") {
+      setShowConfetti(true);
+      localStorage.removeItem("quizCompleted"); // Remove the flag
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 3000);
+    }
+  }, [fetchDashboardData]);
+
+  const formatDate = (timestamp) => {
+    // return moment(timestamp).format("YYYY-MM-DD hh:mm A");
+    return moment(timestamp).format("hh:mm A DD-MM-YYYY");
   };
 
-  const handleDeleteImage = () => {
-    setProfileImage(defaultImage); 
-    setShowOptions(false); 
+
+  const data = useMemo(() => [
+    { title: "Physical Fitness", description: "Fitness Score", route: "/quiz" },
+    { title: "Nutrition", description: "Nutrition Score", route: "/nutritionquiz" },
+    { title: "Mental Well-Being", description: "Mental Health Score", route: "/mentalquiz" },
+    { title: "Lifestyle", description: "Lifestyle Score", route: "/lifestylequiz" },
+    { title: "Bio Markers", description: "Health Indicators", route: "/biomarkersquiz", colSpan: true },
+    { title: "Overall Score", description: "Combined Results", isBottom: true, colSpan: true },
+  ], []);
+  
+
+
+
+ const handleViewBoard = (index) => {
+    if (currentView === index) {
+      // Close view and reset current data
+      setCurrentView(null);
+      fetchDashboardData(); // Reset the scores to the latest
+    } else {
+      // View specific history
+      setCurrentView(index);
+      const selectedData = scoreHistory[index].scores;
+      setScores({
+        "Physical Fitness": selectedData.physicalFitness || 0,
+        "Nutrition": selectedData.nutrition || 0,
+        "Mental Well-Being": selectedData.mentalWellBeing || 0,
+        "Lifestyle": selectedData.lifestyle || 0,
+        "Bio Markers": selectedData.bioMarkers || 0,
+      });
+    }
+  };
+  
+
+  const renderScoreHistory = () => {
+    if (scoreHistory.length < 2) return null; // Don't display if history has less than 2 entries
+
+    const displayedHistory = 
+    scoreHistory.length === 5 ? scoreHistory.slice(1, 5) : scoreHistory.slice(1);// Reverse the entire history
+
+    return (
+      <div>
+        <h3 className="score-history-title">Score History</h3>
+        <table className="score-history-table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Time Stamp</th>
+              <th>Overall Score</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          {displayedHistory.map((item, displayIndex) => {
+            // Map the displayed index to the actual index in scoreHistory
+            const actualIndex = displayIndex + 1;
+
+            return (
+              <tr key={actualIndex}>
+                <td>{displayIndex + 1}</td>
+                <td>{formatDate(item.timestamp)}</td>
+                <td>{Math.round(item.scores.overallScore)}%</td>
+                <td>
+                  <button
+                    className="view-button"
+                    onClick={() => handleViewBoard(actualIndex)}
+                  >
+                    {currentView === actualIndex ? "Close" : "View"}
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+
+const handleImageChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  setLoading(true);
+  const data = new FormData();
+  data.append("file", file);
+  data.append("upload_preset", "healthguard_pro");
+
+  try {
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to upload the image.");
+    }
+
+    const uploadedImage = await res.json();
+    const imageUrl = uploadedImage.secure_url;
+
+
+    // Send imageUrl to backend
+    const payload = {
+      userId,
+      imageUrl,
+    };
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axios.post(endpoints.uploadImage, payload, config);
+
+    if (response.status === 200) {
+      toast.success("Profile image updated successfully!");
+      setProfileImage(imageUrl);
+      // setShowOptions(false);
+    } else {
+      throw new Error("Failed to send image URL to backend.");
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    toast.error("Image upload or update failed. Please try again.");
+  }finally {
+    setLoading(false); // Stop the loader
+    setShowOptions(false);
+  }
+};
+
+  const handleDeleteImage = async() => {
+    setLoading(true);
+    try{
+      const imageUrl = defaultImage;
+      const payload = {
+        userId,
+        imageUrl,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await axios.post(endpoints.uploadImage, payload, config);
+
+      if (response.status === 200) {
+        toast.success("Profile image updated successfully!");
+        setProfileImage(defaultImage);
+      } else {
+        throw new Error("Failed to send image URL to backend.");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error("Image upload or update failed. Please try again.");
+    }finally {
+      setLoading(false); // Stop the loader
+      setShowOptions(false);
+    }
+
+    // setShowOptions(false);
   };
 
   const handleLogout = () => {
     toast(
       (t) => (
-        <div className="toast-popup">
-          <p>Are you sure you want to logout?</p>
-          <div className="toast-popup-buttons">
-            <button
-              className="confirm-button"
-              onClick={() => {
-                toast.dismiss(t.id);
-                
-                toast.dismiss(t.id); 
-                navigate('/');
-                  
-              }}
-            >
-              Confirm
-            </button>
-            <button
-              className="cancel-button"
-              onClick={() => toast.dismiss(t.id)}
-            >
-              Cancel
-            </button>
+        <div className="popup">
+          <div className="toast-popup">
+            <p>Are you sure you want to logout?</p>
+            <div className="toast-popup-buttons">
+              <button
+                className="confirm-button"
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  logout();  // Call logout function here
+                  navigate("/login"); // Navigate to login page after logout
+                }}
+              >
+                Confirm
+              </button>
+              <button
+                className="cancel-button"
+                onClick={() => toast.dismiss(t.id)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       ),
@@ -95,32 +292,80 @@ const Dashboard = () => {
       }
     );
   };
-
+  
+  
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
-      
       console.log("No action for Overall Score card");
       return;
-    } else {
+    }
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      handleScoreUpdate(title); // Update the score dynamically
+      navigate(route); // Make sure navigate is called once
+    }, 2000);
+  };
+
+  const handleScoreUpdate = (category) => {
+    const savedScore = localStorage.getItem(`${category}Score`);
+    // console.log(category);
+    // console.log("savedscore: "+savedScore);
+    if (savedScore) {
+      setScores((prevScores) => ({
+        ...prevScores,
+        [category]: parseInt(savedScore, 10),
+      }));
       
-      setLoading(true); 
-      setTimeout(() => {
-        setLoading(false); 
-        window.location.href = route; 
-      }, 2000); 
+
+      
+
     }
   };
 
-  return (
+  // Calculate Overall Score
+  const calculateOverallScore = () => {
+    const physicalScore = scores["Physical Fitness"];
+    const nutritionScore = scores["Nutrition"];
+    const mentalScore = scores["Mental Well-Being"];
+    const lifestyleScore = scores["Lifestyle"];
+    const biomarkerScore = scores["Bio Markers"];
+
+    // Calculate the sum of all category scores
+    const totalScore =
+      (physicalScore || 0) +
+      (nutritionScore || 0) +
+      (mentalScore || 0) +
+      (lifestyleScore || 0) +
+      (biomarkerScore || 0);
+
+    // Average the score (out of 5 categories)
+    const overallScore = totalScore / 5;
+
+    return overallScore;
+  };
+
+  const overallScore = calculateOverallScore();
+
+  useEffect(() => {
+    // Initialize scores from localStorage for all categories
+    data.forEach((item) => {
+      handleScoreUpdate(item.title);
+    });
+  }, [data]);
+
+return (
     <div className="dashboard">
-      
       {loading && (
         <div className="loader-overlay">
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "20vh" }}>
             <CircularProgress color="success" />
+            <p style={{ marginTop: "20px" }}>Loading... Please wait</p>
           </Box>
         </div>
       )}
+
+      {showConfetti && <Confetti />}
 
       <nav className="navbar">
         <div className="logo">
@@ -132,7 +377,9 @@ const Dashboard = () => {
           </li>
           <li>
             <div className="parent-container">
-              <button className="logout-button" onClick={handleLogout}>Logout</button>
+              <button className="logout-button" onClick={handleLogout}>
+                Logout
+              </button>
             </div>
           </li>
         </ul>
@@ -140,19 +387,10 @@ const Dashboard = () => {
 
       <div className="profile-section">
         <div className="profile-container">
-          <div
-            className="profile-image-background"
-            onClick={() => setShowOptions(!showOptions)} 
-          >
+          <div className="profile-image-background" onClick={() => setShowOptions(!showOptions)}>
             <img className="profile-image" src={profileImage} alt="Profile" />
           </div>
-          <input
-            type="file"
-            id="file-input"
-            style={{ display: "none" }}
-            accept="image/*"
-            onChange={handleImageChange}
-          />
+          <input type="file" id="file-input" style={{ display: "none" }} accept="image/*" onChange={handleImageChange} />
           {showOptions && (
             <div className="profile-options">
               <button onClick={() => document.getElementById("file-input").click()} className="profile-option-btn">
@@ -164,7 +402,7 @@ const Dashboard = () => {
             </div>
           )}
           <div className="profile-name-badge">
-            <p className="profile-name">Jack</p>
+            <p className="profile-name">{fullName}</p>
           </div>
         </div>
       </div>
@@ -180,43 +418,34 @@ const Dashboard = () => {
       <div className="card-container">
         {data.map((item, index) => (
           <div
-            className={`card ${item.title.toLowerCase().replace(/\s/g, '-')}`}
             key={index}
+            className={`card ${item.colSpan ? "col-span-2" : ""}`}
             onClick={() => handleCardClick(item.route, item.title)}
           >
             <h3>{item.title}</h3>
-            <p className="score">{item.score}</p>
+            <p className="score">
+              {item.title === "Overall Score"
+                ? `${overallScore.toFixed(0)}%`
+                : `${scores[item.title] || 0}%`}
+            </p>
             <p>{item.description}</p>
             <div className="progress-bar">
-              <div className="progress" style={{ width: item.score }}></div>
+              <div
+                className={`progress ${
+                  (item.title === "Overall Score" ? overallScore : scores[item.title]) === 100
+                    ? "curved-end"
+                    : ""
+                }`}
+                style={{
+                  width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`,
+                }}
+              ></div>
             </div>
           </div>
         ))}
       </div>
 
-      <h3 className="score-history-title">Score History</h3>
-      <table className="score-history-table">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Time Stamp</th>
-            <th>Overall Score</th>
-            <th>View Board</th>
-          </tr>
-        </thead>
-        <tbody>
-          {scoreHistory.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.timeStamp}</td>
-              <td>{item.overallScore}</td>
-              <td>
-                <button className="view-button">View</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+       {renderScoreHistory()}
 
       <ToastContainer />
     </div>
@@ -224,3 +453,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+

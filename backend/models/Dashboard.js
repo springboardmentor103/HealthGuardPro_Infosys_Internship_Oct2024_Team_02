@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const dashboardSchema = mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    imageUrl: { type: String, default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLdIEENaWqGZV9kxR871g9p6ywGNnqvbyd3z-3MoYMi-Fc6WZvtU7wE68_RHCBINkRjl4&usqp=CAU" },
+    imageUrl: { type: String, default: "https://res.cloudinary.com/ddfwslkx0/image/upload/v1733317585/images_iwucqp.png" },
     quizScores: {
       physicalFitness: { type: Number, default: 0 },
       nutrition: { type: Number, default: 0 },

@@ -127,3 +127,14 @@ button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+.signup-toast-wrapper .Toastify__toast-container {
+  position: fixed;
+  top: -80%;
+  left: 20%;
+  z-index: 9999;
+}
+
+.signup-toast-wrapper .Toastify__toast {
+  margin-bottom: 0.5rem;
+}

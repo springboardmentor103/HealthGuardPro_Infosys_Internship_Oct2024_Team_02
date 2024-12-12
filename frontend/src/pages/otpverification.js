@@ -17,6 +17,12 @@ const OtpVerification = () => {
   const email = location.state?.email || "";
 
   useEffect(() => {
+    if (!email) {
+      navigate("/forgot-password"); // Redirect if no email in state
+    }
+  }, [email, navigate]);
+  
+  useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => setTimer(timer - 1), 1000);
       return () => clearInterval(interval);
@@ -133,6 +139,9 @@ const OtpVerification = () => {
       >
         {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
       </button>
+      <div className="otp-toast-wrapper">
+        <ToastContainer autoClose={3000} />
+      </div>
     </div>
   );
 };
