@@ -131,6 +131,7 @@ const Leaderboard = () => {
               <p className="user-name">{user.name}</p>
             </div>
             <p className="user-rank">{user.rank}</p>
+            <p className="user-score">{user.score}</p>
           </div>
         ))}
       </div>
