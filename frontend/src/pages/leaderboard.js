@@ -106,7 +106,21 @@ const Leaderboard = () => {
       <div className="leaderboard-list">
         <div className="list-header">
           <h3>Leaderboard</h3>
-          <h3>Rank</h3>
+          <div>
+            <h3>Rank</h3>
+            <select
+              value={selectedMetric}
+              onChange={(e) => setSelectedMetric(e.target.value)}
+              className="metric-dropdown"
+            >
+              <option value="overallScore">Overall Score</option>
+              <option value="physicalFitness">Physical Fitness</option>
+              <option value="nutrition">Nutrition</option>
+              <option value="mentalWellBeing">Mental Well-Being</option>
+              <option value="lifestyle">Lifestyle</option>
+              <option value="bioMarkers">Bio Markers</option>
+            </select>
+          </div>
         </div>
         {leaderboardData.slice(0, 11).map((user) => ( // Display top 10, excluding the current user (index 0)
           <div className="list-item" key={user.rank}>
@@ -122,6 +136,7 @@ const Leaderboard = () => {
               <p className="user-name">{user.name}</p>
             </div>
             <p className="user-rank">{user.rank}</p>
+            <p className="user-score">{user.score}</p>
           </div>
         ))}
       </div>

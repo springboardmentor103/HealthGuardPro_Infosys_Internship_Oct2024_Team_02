@@ -282,6 +282,23 @@ a {
   background-color: #e53935;
 }
 
+/* Dropdown Styles */
+.metric-dropdown {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+.metric-dropdown:focus {
+  outline: none;
+  border-color: #4caf50;
+border-width: 3px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header {
