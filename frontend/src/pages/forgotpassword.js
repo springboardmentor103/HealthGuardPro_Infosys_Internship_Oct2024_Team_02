@@ -19,13 +19,15 @@ const ForgotPassword = () => {
       return;
     }
 
+    const processedEmail = email.trim().toLowerCase();
+
     try {
       const response = await fetch(endpoints.sendOtp, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: processedEmail }),
       });
 
       const data = await response.json();
