@@ -12,6 +12,7 @@ const Leaderboard = () => {
   const [userData, setUserData] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [selectedMetric, setSelectedMetric] = useState("overallScore");
   const navigate = useNavigate();
 
   const { token } = useContext(AuthContext);
@@ -35,25 +36,25 @@ const Leaderboard = () => {
   };
 
   // Fetch leaderboard data on component mount
-  useEffect(() => {
-    const fetchLeaderboard = async () => {
-      try {
-        const response = await axios.get(endpoints.leaderboard, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Replace with the token as needed
-          },
-        });
-        const { leaderboard, userData } = response.data;
-        setLeaderboardData(leaderboard);
-        setUserData(userData);
-      } catch (error) {
-        console.error("Error fetching leaderboard data", error);
-        toast.error("Failed to load leaderboard data.");
-      }
-    };
+  const fetchLeaderboard = async (metric) => {
+    try {
+      const response = await axios.get(`${endpoints.leaderboard(metric)}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Replace with the token as needed
+        },
+      });
+      const { leaderboard, userData } = response.data;
+      setLeaderboardData(leaderboard);
+      setUserData(userData);
+    } catch (error) {
+      console.error("Error fetching leaderboard data", error);
+      toast.error("Failed to load leaderboard data.");
+    }
+  };
 
-    fetchLeaderboard();
-  }, []);
+  useEffect(() => {
+    fetchLeaderboard(selectedMetric);
+  }, [selectedMetric]);
 
   // Ensure leaderboard is ready
   if (!leaderboardData.length || !userData) {
@@ -95,7 +96,9 @@ const Leaderboard = () => {
             className="top-profile-image"
           />
           <h2 className="top-name">{userData.name}</h2>
-          <p className="top-rank">#{userData.rank}</p>
+          <p className="top-rank">
+            <span className="pill-rank">#{userData.rank}</span>
+          </p>
         </div>
       </div>
 
@@ -108,6 +111,9 @@ const Leaderboard = () => {
         {leaderboardData.slice(0, 11).map((user) => ( // Display top 10, excluding the current user (index 0)
           <div className="list-item" key={user.rank}>
             <div className="user-info">
+              <p className="user-rank">
+                <span className="pill-rank">#{user.rank}</span>
+              </p>
               <img
                 src={user.image}
                 alt={user.name}
