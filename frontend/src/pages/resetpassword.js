@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate, useLocation } from "react-router-dom"; 
-import endpoints from "../config/apiConfig"; 
+import { useNavigate, useLocation } from "react-router-dom";
+import endpoints from "../config/apiConfig";
 import "../styles/resetpassword.css";
 
 const ResetPassword = () => {
@@ -10,11 +10,12 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const confirmPasswordRef = useRef(null);
   const navigate = useNavigate();
-  const location = useLocation(); 
-  const email = location.state?.email || ""; 
+  const location = useLocation();
+  const email = location.state?.email || "";
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     return regex.test(password);
   };
 
@@ -68,43 +69,45 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="container">
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <h1 className="heading">HealthGuard Pro</h1>
-      <h2 className="reset-password">Reset Password</h2>
-      <p className="enter">Please enter your new password</p>
-      <input
-        type="password"
-        className="password-input"
-        placeholder="New Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        autoFocus
-        onKeyDown={handleKeyDown}
-      />
-      <input
-        type="password"
-        className="confirm-password-input"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        ref={confirmPasswordRef}
-      />
-      <button className="reset-button" onClick={handleResetPassword}>
-        Reset
-      </button>
-      <div className="signup-toast-wrapper">
-        <ToastContainer autoClose={3000} />
+    <div className="reset-card">
+      <div className="reset-container">
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <h1 className="heading">HealthGuard Pro</h1>
+        <h2 className="reset-password">Reset Password</h2>
+        <p className="enter">Please enter your new password</p>
+        <input
+          type="password"
+          className="password-input"
+          placeholder="New Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          autoFocus
+          onKeyDown={handleKeyDown}
+        />
+        <input
+          type="password"
+          className="confirm-password-input"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          ref={confirmPasswordRef}
+        />
+        <button className="reset-button" onClick={handleResetPassword}>
+          Reset
+        </button>
+        <div className="signup-toast-wrapper">
+          <ToastContainer autoClose={3000} />
+        </div>
       </div>
     </div>
   );
