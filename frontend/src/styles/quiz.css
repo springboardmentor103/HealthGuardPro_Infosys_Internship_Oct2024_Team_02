@@ -29,20 +29,14 @@
     padding: 20px 20px 80px;
     align-self: stretch;
     max-width: 100%;
-    margin-right: 300px;
-    margin-left: 300px;
-    margin-top: 125px;
-    padding-top: 50px;
-    border: 2px solid black;
-    border-radius: 25px;
-    box-shadow: 10px 5px 5px rgb(55, 54, 54);
+    margin: 0 auto;
 }
 
 .subtitle {
     color: #1B281B;
     text-align: center;
     font-family: Arial, sans-serif;
-    font-size: 50px;
+    font-size: 32px;
     font-weight: 500;
     line-height: 1.4;
     padding: 70px 50px;
@@ -52,7 +46,7 @@
     color: #1B281B;
     text-align: center;
     font-family: Arial, sans-serif;
-    font-size: 45px;
+    font-size: 25px;
     font-weight: 400;
     line-height: 1.5;
     margin: 10px 0;
@@ -71,13 +65,12 @@
 
 .option-button {
     display: flex;
-    font-size: 26px;
-    padding: 15px 20px;
-    margin-left: 20px;
+    font-size: 16px;
+    padding: 10px 16px;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    border: 2px solid black;
+    border: 2px solid rgba(73, 110, 75, 0.20);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     width: 100%;
@@ -86,12 +79,12 @@
 }
 
 .submit-button {
-    font-size: 25px;
+    font-size: 15px;
     display: flex;
     width: 100%;
     max-width: 350px;
-    margin-top: 50px;
-    padding: 20px 30px;
+    height: 44px;
+    padding: 12px 24px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
