@@ -159,7 +159,10 @@ a {
 }
 
 .list-header {
-  padding-left: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
 }
 
 .list-item {
@@ -421,16 +424,32 @@ a {
 /* Styles for the dropdown to make it look uniform with other elements */
 .metric-dropdown {
   padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  transition: border-color 0.3s ease;
+  font-size: 1.5rem;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1em;
+  padding-right: 2rem;
 }
 
 .metric-dropdown:focus {
-  border-color: #4caf50;
   outline: none;
+  border: none;
+}
+
+.metric-dropdown option {
+  font-size: 1rem;
+  background-color: white;
+  color: black;
+  font-weight: normal;
 }
 
 /* Styles for the score heading and score elements */

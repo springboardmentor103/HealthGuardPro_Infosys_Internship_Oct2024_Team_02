@@ -1,5 +1,5 @@
-import React, { useState, useEffect,useContext } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import endpoints from "../config/apiConfig";
@@ -74,8 +74,12 @@ const Leaderboard = () => {
             <button className="close-ham" onClick={closeMenu}>
               {/* Close Icon */}
             </button>
-            <Link to="/" className="nav-button">Dashboard</Link>
-            <button className="logut-button" onClick={handleLogout}>Logout</button>
+            <Link to="/" className="nav-button">
+              Dashboard
+            </Link>
+            <button className="logut-button" onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         </nav>
       </header>
@@ -106,38 +110,39 @@ const Leaderboard = () => {
       <div className="leaderboard-list">
         <div className="list-header">
           <h3>Leaderboard</h3>
-          <div>
-            <h3>Rank</h3>
-            <select
-              value={selectedMetric}
-              onChange={(e) => setSelectedMetric(e.target.value)}
-              className="metric-dropdown"
-            >
-              <option value="overallScore">Overall Score</option>
-              <option value="physicalFitness">Physical Fitness</option>
-              <option value="nutrition">Nutrition</option>
-              <option value="mentalWellBeing">Mental Well-Being</option>
-              <option value="lifestyle">Lifestyle</option>
-              <option value="bioMarkers">Bio Markers</option>
-            </select>
-          </div>
+          <select
+            value={selectedMetric}
+            onChange={(e) => setSelectedMetric(e.target.value)}
+            className="metric-dropdown"
+          >
+            <option value="overallScore">Overall Score</option>
+            <option value="physicalFitness">Physical Fitness</option>
+            <option value="nutrition">Nutrition</option>
+            <option value="mentalWellBeing">Mental Well-Being</option>
+            <option value="lifestyle">Lifestyle</option>
+            <option value="bioMarkers">Bio Markers</option>
+          </select>
         </div>
-        {leaderboardData.slice(0, 11).map((user) => ( // Display top 10, excluding the current user (index 0)
-          <div className="list-item" key={user.rank}>
-            <div className="user-info">
-              <p className="user-rank">
-                <span className="pill-rank">#{user.rank}</span>
-              </p>
-              <img
-                src={user.image}
-                alt={user.name}
-                className="list-profile-image"
-              />
-              <p className="user-name">{user.name}</p>
+        {leaderboardData.slice(0, 11).map(
+          (
+            user // Display top 10, excluding the current user (index 0)
+          ) => (
+            <div className="list-item" key={user.rank}>
+              <div className="user-info">
+                <p className="user-rank">
+                  <span className="pill-rank">#{user.rank}</span>
+                </p>
+                <img
+                  src={user.image}
+                  alt={user.name}
+                  className="list-profile-image"
+                />
+                <p className="user-name">{user.name}</p>
+              </div>
+              <p className="user-score">{user.score}</p>
             </div>
-            <p className="user-score">{user.score}</p>
-          </div>
-        ))}
+          )
+        )}
       </div>
 
       {showToast && (
