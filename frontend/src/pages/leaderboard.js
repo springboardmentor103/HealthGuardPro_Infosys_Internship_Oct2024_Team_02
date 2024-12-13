@@ -139,7 +139,7 @@ const Leaderboard = () => {
                 />
                 <p className="user-name">{user.name}</p>
               </div>
-              <p className="user-score">{user.score}</p>
+              <p className="user-score">{Math.round(user.score)}</p>
             </div>
           )
         )}
