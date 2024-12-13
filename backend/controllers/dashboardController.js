@@ -2,14 +2,16 @@ const Dashboard = require("../models/Dashboard");
 
 const getLeaderboard = async (req, res) => {
   try {
+    const { metric = "overallScore" } = req.query;
+
     const dashboards = await Dashboard.find({})
-      .populate("user", "name email") 
-      .sort({ "quizScores.overallScore": -1 }) 
-      .limit(10); 
+      .populate("user", "name email")
+      .sort({ [`quizScores.${metric}`]: -1 })
+      .limit(10);
 
     const userDashboard = await Dashboard.findOne({ user: req.user._id })
       .populate("user", "name email")
-      .lean(); // Convert the Mongoose object to plain JS 
+      .lean();
 
     if (!userDashboard) {
       return res.status(404).json({ message: "User dashboard not found" });
@@ -17,26 +19,25 @@ const getLeaderboard = async (req, res) => {
 
     const allDashboards = await Dashboard.find({})
       .populate("user", "name email")
-      .sort({ "quizScores.overallScore": -1 });
+      .sort({ [`quizScores.${metric}`]: -1 });
 
     const userRank =
       allDashboards.findIndex(
         (dashboard) => dashboard.user._id.toString() === req.user._id.toString()
       ) + 1;
 
-    // Add the user's rank to the response
     const leaderboard = dashboards.map((dashboard, index) => ({
       rank: index + 1,
       name: dashboard.user.name,
       image: dashboard.imageUrl,
-      overallScore: dashboard.quizScores.overallScore,
+      score: dashboard.quizScores[metric],
     }));
 
     const userData = {
       rank: userRank,
       name: userDashboard.user.name,
       image: userDashboard.imageUrl,
-      overallScore: userDashboard.quizScores.overallScore,
+      score: userDashboard.quizScores[metric],
     };
 
     res.status(200).json({ leaderboard, userData });
