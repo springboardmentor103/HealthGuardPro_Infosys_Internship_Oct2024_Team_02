@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom'; 
-import endpoints from '../config/apiConfig'; 
+import endpoints from '../config/apiConfig';
 import '../styles/signup.css';
 
 function Signup() {
@@ -95,6 +95,7 @@ function Signup() {
   };
 
   return (
+    <div className="login-card">
     <div className="login-container">
       <ToastContainer position="top-center" />
       <div className="login-box">
@@ -144,6 +145,7 @@ function Signup() {
       <div className="signup-toast-wrapper">
         <ToastContainer autoClose={3000} />
       </div>
+    </div>
     </div>
   );
 }

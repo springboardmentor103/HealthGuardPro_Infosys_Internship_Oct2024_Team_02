@@ -104,7 +104,8 @@ const OtpVerification = () => {
   };
 
   return (
-    <div className="container">
+    <div className="otp-card">
+    <div className="otp-container">
       <ToastContainer position="top-center" autoClose={3000} />
       <h1 className="heading">HealthGuard Pro</h1>
       <h2 className="otp">Enter OTP</h2>
@@ -142,6 +143,7 @@ const OtpVerification = () => {
       <div className="otp-toast-wrapper">
         <ToastContainer autoClose={3000} />
       </div>
+    </div>
     </div>
   );
 };
