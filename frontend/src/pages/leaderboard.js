@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -36,11 +36,11 @@ const Leaderboard = () => {
   };
 
   // Fetch leaderboard data on component mount
-  const fetchLeaderboard = async (metric) => {
+  const fetchLeaderboard = useCallback(async (metric) => {
     try {
       const response = await axios.get(`${endpoints.leaderboard(metric)}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // Replace with the token as needed
+          Authorization: `Bearer ${token}`,
         },
       });
       const { leaderboard, userData } = response.data;
@@ -50,11 +50,11 @@ const Leaderboard = () => {
       console.error("Error fetching leaderboard data", error);
       toast.error("Failed to load leaderboard data.");
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchLeaderboard(selectedMetric);
-  }, [selectedMetric]);
+  }, [selectedMetric, fetchLeaderboard]);
 
   // Ensure leaderboard is ready
   if (!leaderboardData.length || !userData) {
