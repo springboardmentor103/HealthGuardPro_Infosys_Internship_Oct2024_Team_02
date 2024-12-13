@@ -9,7 +9,6 @@ body {
   text-align: center;
 }
 
-
 /* Header */
 .header {
   display: flex;
@@ -26,10 +25,9 @@ body {
   flex-shrink: 0; /* Prevents shrinking on small screens */
 }
 
-.logo:hover{
+.logo:hover {
   color: #4caf50;
   cursor: pointer;
-
 }
 .nav-menu {
   display: flex;
@@ -38,21 +36,18 @@ body {
 }
 
 .nav-button {
-  
   font-size: 1.3rem;
   padding: 0.5rem 1rem;
-  
+
   color: #000;
   font-weight: bold;
   cursor: pointer;
   margin: 0 0.5rem;
   transition: all 0.3s ease;
- 
 }
-.nav-button:hover{
+.nav-button:hover {
   color: #4caf50;
 }
-
 
 .logut-button {
   background: #4caf50;
@@ -64,8 +59,6 @@ body {
   cursor: pointer;
 }
 
-
-
 /* Hamburger Icon for Mobile */
 .hamburger {
   display: none;
@@ -75,7 +68,7 @@ body {
   height: 25px;
   cursor: pointer;
 }
-.close-ham{
+.close-ham {
   display: none;
 }
 
@@ -100,17 +93,24 @@ body {
 .top-section {
   position: relative;
   padding: 0 6%; /* Added padding for smaller screens */
-
 }
 
 .background-image {
-  border-radius:50px;
+  border-radius: 50px;
   padding-top: 2%;
   display: block;
   width: 100%;
   height: -10%;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 70%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 70%);
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0) 70%
+  );
 }
 
 .top-user {
@@ -158,12 +158,15 @@ a {
   padding: 1rem 0;
 }
 
-.list-header{
-  padding-left:2rem;
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
 }
 
-.list-item{
-  padding-right:0.8rem;
+.list-item {
+  padding-right: 0.8rem;
 }
 
 .user-info {
@@ -178,7 +181,10 @@ a {
   margin-right: 1rem;
   border: 2.5px solid #4caf50;
 }
-
+.user-score {
+  font-size: 1.6rem;
+  color: #4caf50 !important;
+}
 .user-name {
   font-size: 1.6rem;
   margin-top: 1.25rem;
@@ -204,7 +210,6 @@ a {
   pointer-events: none;
 }
 
-
 .Toastify__toast-container {
   display: flex !important;
   justify-content: center !important;
@@ -219,16 +224,16 @@ a {
 
 .Toastify__toast {
   position: absolute;
-  top: 50% !important;    
-  left: 250% !important;   
-  transform: translate(-50%, -50%) !important; 
+  top: 50% !important;
+  left: 250% !important;
+  transform: translate(-50%, -50%) !important;
   background-color: #fff;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 335px;
   text-align: center;
-  z-index: 9999;          
+  z-index: 9999;
 }
 
 .toast-popup {
@@ -237,7 +242,6 @@ a {
   width: 220px;
   text-align: center;
   justify-items: center;
-  
 }
 
 .toast-popup p {
@@ -303,15 +307,13 @@ a {
     display: flex;
     flex-direction: col;
     justify-content: space-around;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-
-    
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
   }
 
-  .close-ham{
+  .close-ham {
     display: flex;
     color: red;
     background: transparent;
@@ -323,32 +325,29 @@ a {
     height: 3px;
 
     border-radius: 10px;
-   
   }
   .background-image {
-    border-radius:18px;
+    border-radius: 18px;
   }
- 
 
   .nav-menu {
     position: fixed;
-  top: 0;
-  right: 0;
-  width: 250px;
-  height: 100vh;
-  background-color: #fff;
-  transform: translateX(100%);
- 
-  z-index: 9999; /* Ensure the menu stays on top */
-  overflow-y: auto; /* Prevent overflow issues */
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: #fff;
+    transform: translateX(100%);
+
+    z-index: 9999; /* Ensure the menu stays on top */
+    overflow-y: auto; /* Prevent overflow issues */
   }
 
   .nav-menu.active {
     transform: translateX(0);
   }
-  .close-ham.on{
+  .close-ham.on {
     transform: translate(80%);
-
   }
 
   .user-rank {
@@ -363,9 +362,16 @@ a {
   .list-header,
   .list-item {
     display: flex;
-  justify-content: space-between;
-  padding: 1rem 0;
-  
+    justify-content: space-between;
+    padding: 1rem 0;
+  }
+
+  .list-header {
+    padding-left: 2rem;
+  }
+
+  .list-item {
+    padding-right: 0.8rem;
   }
 
   .list-header{
@@ -420,7 +426,67 @@ a {
 
   .user-info {
     text-align: center;
-    
   }
-  
+}
+
+/* Styles for the dropdown to make it look uniform with other elements */
+.metric-dropdown {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1em;
+  padding-right: 2rem;
+}
+
+.metric-dropdown:focus {
+  outline: none;
+  border: none;
+}
+
+.metric-dropdown option {
+  font-size: 1rem;
+  background-color: white;
+  color: black;
+  font-weight: normal;
+}
+
+/* Styles for the score heading and score elements */
+.list-header h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.user-score {
+  font-size: 1.6rem;
+  color: #4caf50;
+}
+
+/* Ensure score, leaderboard score, and rank are in one straight line */
+.list-header,
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+/* Add styles to make the rank a pill shape */
+.pill-rank {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
 }
