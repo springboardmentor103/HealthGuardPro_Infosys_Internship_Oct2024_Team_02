@@ -6,10 +6,9 @@
 }
 
 html, body {
-  height: 100%; /* Make sure the body takes the full height */
+  height: 100%; 
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 .login-card {
@@ -48,10 +47,9 @@ html, body {
 
 @media (max-width: 768px) {
   .login-container {
-    width: 80%; /* Adjust width for smaller screens */
+    width: 50%; /* Adjust width for smaller screens */
   }
 }
-
 
 .login-container:hover{
   outline: none;
