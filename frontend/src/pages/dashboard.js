@@ -141,21 +141,26 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {displayedHistory.map((item, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
+          {displayedHistory.map((item, displayIndex) => {
+            // Map the displayed index to the actual index in scoreHistory
+            const actualIndex = displayIndex + 1;
+
+            return (
+              <tr key={actualIndex}>
+                <td>{displayIndex + 1}</td>
                 <td>{formatDate(item.timestamp)}</td>
                 <td>{Math.round(item.scores.overallScore)}%</td>
                 <td>
                   <button
                     className="view-button"
-                    onClick={() => handleViewBoard(index+1)}
+                    onClick={() => handleViewBoard(actualIndex)}
                   >
-                    {currentView === index ? "Close" : "View"}
+                    {currentView === actualIndex ? "Close" : "View"}
                   </button>
                 </td>
               </tr>
-            ))}
+            );
+          })}
           </tbody>
         </table>
       </div>
@@ -166,7 +171,7 @@ const Dashboard = () => {
 const handleImageChange = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
-
+  setLoading(true);
   const data = new FormData();
   data.append("file", file);
   data.append("upload_preset", "healthguard_pro");
@@ -206,17 +211,21 @@ const handleImageChange = async (event) => {
     if (response.status === 200) {
       toast.success("Profile image updated successfully!");
       setProfileImage(imageUrl);
-      setShowOptions(false);
+      // setShowOptions(false);
     } else {
       throw new Error("Failed to send image URL to backend.");
     }
   } catch (error) {
     console.error("Error:", error.message);
     toast.error("Image upload or update failed. Please try again.");
+  }finally {
+    setLoading(false); // Stop the loader
+    setShowOptions(false);
   }
 };
 
   const handleDeleteImage = async() => {
+    setLoading(true);
     try{
       const imageUrl = defaultImage;
       const payload = {
@@ -235,16 +244,19 @@ const handleImageChange = async (event) => {
 
       if (response.status === 200) {
         toast.success("Profile image updated successfully!");
+        setProfileImage(defaultImage);
       } else {
         throw new Error("Failed to send image URL to backend.");
       }
     } catch (error) {
       console.error("Error:", error.message);
       toast.error("Image upload or update failed. Please try again.");
+    }finally {
+      setLoading(false); // Stop the loader
+      setShowOptions(false);
     }
 
-    setProfileImage(defaultImage);
-    setShowOptions(false);
+    // setShowOptions(false);
   };
 
   const handleLogout = () => {
@@ -419,9 +431,13 @@ return (
             <p>{item.description}</p>
             <div className="progress-bar">
               <div
-                className="progress"
+                className={`progress ${
+                  (item.title === "Overall Score" ? overallScore : scores[item.title]) === 100
+                    ? "curved-end"
+                    : ""
+                }`}
                 style={{
-                  width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`
+                  width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`,
                 }}
               ></div>
             </div>

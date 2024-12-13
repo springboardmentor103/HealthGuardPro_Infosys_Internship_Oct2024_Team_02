@@ -294,6 +294,10 @@ h2 {
   transition: width 0.3s ease-in-out;
 }
 
+.progress.curved-end {
+  border-radius: 5px 5px 5px 5px; /* Rounded right edges when progress hits 100% */
+}
+
 .score-history-title {
   margin-top: 40px;
   font-size: 20px;
