@@ -95,7 +95,7 @@ function Signup() {
   };
 
   return (
-    <div className="login-card">
+    <div className="signup-card">
     <div className="signup-container">
       <ToastContainer position="top-center" />
       <div className="login-box">
