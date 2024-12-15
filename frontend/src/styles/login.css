@@ -19,7 +19,9 @@ html, body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 33px;
+  width: 100vw; /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
+  padding: 0;
 }
 
 .login-container {
@@ -32,11 +34,10 @@ html, body {
   border-radius: 50px;
   box-shadow: 0 50px 100px rgba(0, 0, 0, 0.1);
   text-align: center;
-  padding: 203px;
+  padding: 200px;
   flex-direction: column;
   gap: 1rem;
-  
-  margin-bottom: 12px;
+  margin-top: 15px;
 }
 
 .login-box h1 {

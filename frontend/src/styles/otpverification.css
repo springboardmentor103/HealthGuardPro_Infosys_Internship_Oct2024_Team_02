@@ -7,28 +7,30 @@ body,html {
   height: 100%;
 }
 
-.otp-card{
+.otp-card {
   font-family: Arial, sans-serif;
-background: linear-gradient(135deg, #e8f5e9, #e8f5e9);
-display: flex;
-justify-content: center;
-align-items: center;
-flex-direction: column;
-padding-top: 70px;
+  background: linear-gradient(135deg, #e8f5e9, #e8f5e9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw; /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
+  padding: 0; /* Ensure no extra padding affects layout */
 }
 .otp-container {
   display: fixed;
   justify-content: center;
   align-items: center;
-  width: 950px; /* Reduced width */
+  width: 310px; /* Reduced width */
   height: auto;
-  padding: 80px;
+  padding: 50px;
   background-color: #ffffff;
   border-radius: 50px;
   box-shadow: 0 50px 100px rgba(0, 0, 0, 0.1);
   text-align: center;
-  padding: 18%;
-  margin-top: 20px;
+  padding: 13%;
+  margin-top: 10px;
   flex-direction: column;
   gap: 1rem;
 }

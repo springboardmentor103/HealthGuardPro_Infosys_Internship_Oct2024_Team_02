@@ -16,7 +16,9 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 23px;
+  width: 100vw; /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
+  padding: 0;
 }
 
 .signup-container {
@@ -34,7 +36,7 @@ body {
   gap: 1.5rem;
   
   margin-top: 15px;
-  margin-bottom: 20px;
+ 
 }
 
 .login-box {
