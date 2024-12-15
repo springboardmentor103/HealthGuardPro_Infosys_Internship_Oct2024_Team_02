@@ -16,11 +16,11 @@ const OtpVerification = () => {
   const location = useLocation();
   const email = location.state?.email || "";
 
-  useEffect(() => {
-    if (!email) {
-      navigate("/forgot-password"); // Redirect if no email in state
-    }
-  }, [email, navigate]);
+  // useEffect(() => {
+  //   if (!email) {
+  //     navigate("/forgot-password"); // Redirect if no email in state
+  //   }
+  // }, [email, navigate]);
   
   useEffect(() => {
     if (timer > 0) {
