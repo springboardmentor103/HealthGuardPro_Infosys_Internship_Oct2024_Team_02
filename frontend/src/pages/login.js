@@ -2,12 +2,14 @@ import React, { useRef, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 import endpoints from "../config/apiConfig";
 import AuthContext from "../context/AuthContext";
 import "../styles/login.css";
 
 function LoginPage() {
-  const { login } = useContext(AuthContext); // Access the login function from AuthContext
+  const { login } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +52,7 @@ function LoginPage() {
 
       if (response.ok) {
         toast.success("Login successful!");
-        login(data.token, data._id, data.name); // Save token and set authenticated state via AuthContext
+        login(data.token, data._id, data.name);
         setTimeout(() => {
           navigate("/dashboard");
         }, 1000);
@@ -65,46 +67,61 @@ function LoginPage() {
   };
 
   return (
-<div className="login-card">
-  <div className="login-container">
-    <div className="login-box">
-      <h1>Welcome to <span>HealthGuard Pro</span></h1>
-      <p>Log In to get started</p>
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="email" 
-          placeholder="Email Address" 
-          autoFocus 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onKeyDown={handleEmailKeyDown} 
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          ref={passwordInputRef}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={handlePasswordKeyDown} 
-        />
-        <p className="forgotpassword">
-          <Link to="/forgot-password">Forgot Password?</Link>
-        </p>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Logging in...' : 'Log In'}
-        </button>
-      </form>
-      <p className="signup-text">
-        Don't have an account? <Link to="/signup">Sign Up</Link>
-      </p>
-    </div>
-    <div className="login-toast-wrapper">
+    <div className="login-card">
+      <div className="login-container">
+        <div className="login-box">
+          <h1>
+            Welcome to <span>HealthGuard Pro</span>
+          </h1>
+          <p>Log In to get started</p>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              placeholder="Email Address"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleEmailKeyDown}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              ref={passwordInputRef}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handlePasswordKeyDown}
+            />
+            <p className="forgotpassword">
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </p>
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Log In"}
+            </button>
+          </form>
+          <p className="signup-text">
+            Don't have an account? <Link to="/signup">Sign Up</Link>
+          </p>
+        </div>
         <ToastContainer autoClose={3000} />
       </div>
 
-  </div>
-</div>
-
+      {isLoading && (
+        <div className="loader-overlay">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "20vh",
+            }}
+          >
+            <CircularProgress color="success" />
+            <p style={{ marginTop: "20px" }}>Loading... Please wait</p>
+          </Box>
+        </div>
+      )}
+    </div>
   );
 }
 
