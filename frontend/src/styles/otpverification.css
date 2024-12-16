@@ -22,7 +22,7 @@ body,html {
   display: fixed;
   justify-content: center;
   align-items: center;
-  width: 310px; /* Reduced width */
+  width: 700px; /* Reduced width */
   height: auto;
   padding: 50px;
   background-color: #ffffff;
@@ -191,6 +191,19 @@ button:disabled {
 
 .otp-toast-wrapper .Toastify__toast {
   margin-bottom: 0.5rem;
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); 
+  z-index: 9999; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @keyframes errorShake {
