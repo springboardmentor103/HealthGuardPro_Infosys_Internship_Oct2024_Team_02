@@ -19,11 +19,11 @@ const ResetPassword = () => {
     return regex.test(password);
   };
 
-  useEffect(() => {
-    if (!email) {
-      navigate("/otp-verification"); // Redirect if no email in state
-    }
-  }, [email, navigate]);
+   useEffect(() => {
+     if (!email) {
+       navigate("/otp-verification"); // Redirect if no email in state
+     }
+   }, [email, navigate]);
 
   const handleResetPassword = async () => {
     if (!validatePassword(password)) {

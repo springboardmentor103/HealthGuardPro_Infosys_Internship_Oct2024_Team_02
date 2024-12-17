@@ -4,6 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import endpoints from "../config/apiConfig";
 import "../styles/otpverification.css";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const OtpVerification = () => {
   const [otpArray, setOtpArray] = useState(new Array(6).fill(""));
@@ -16,12 +18,13 @@ const OtpVerification = () => {
   const location = useLocation();
   const email = location.state?.email || "";
 
-  useEffect(() => {
-    if (!email) {
-      navigate("/forgot-password"); // Redirect if no email in state
-    }
-  }, [email, navigate]);
-  
+
+   useEffect(() => {
+     if (!email) {
+       navigate("/forgot-password"); // Redirect if no email in state
+     }
+   }, [email, navigate]);
+
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => setTimer(timer - 1), 1000);
@@ -105,45 +108,52 @@ const OtpVerification = () => {
 
   return (
     <div className="otp-card">
-    <div className="otp-container">
-      <ToastContainer position="top-center" autoClose={3000} />
-      <h1 className="heading">HealthGuard Pro</h1>
-      <h2 className="otp">Enter OTP</h2>
-      <p className="enter">Please enter the 6-digit code</p>
-      <div className="otp-input-group">
-        {otpArray.map((digit, index) => (
-          <input
-            key={index}
-            ref={(el) => (inputRefs.current[index] = el)}
-            type="text"
-            className={`otp-input-box ${digit ? "filled" : ""} ${
-              showError ? "error" : ""
-            }`}
-            value={digit}
-            onChange={(e) => handleInputChange(e, index)}
-            maxLength="1"
-            autoFocus={index === 0}
-          />
-        ))}
+      <div className="otp-container">
+        <ToastContainer position="top-center" autoClose={3000} />
+        <h1 className="heading">HealthGuard Pro</h1>
+        <h2 className="otp">Enter OTP</h2>
+        <p className="enter">Please enter the 6-digit code</p>
+        <div className="otp-input-group">
+          {otpArray.map((digit, index) => (
+            <input
+              key={index}
+              ref={(el) => (inputRefs.current[index] = el)}
+              type="text"
+              className={`otp-input-box ${digit ? "filled" : ""} ${
+                showError ? "error" : ""
+              }`}
+              value={digit}
+              onChange={(e) => handleInputChange(e, index)}
+              maxLength="1"
+              autoFocus={index === 0}
+            />
+          ))}
+        </div>
+        <button
+          className="verify-button"
+          onClick={handleVerifyOtp}
+          disabled={isLoading || otp.length !== 6}
+        >
+          {isLoading ? "Verifying..." : "Verify"}
+        </button>
+        <button
+          className="resend-button"
+          onClick={handleResendOTP}
+          disabled={timer > 0}
+        >
+          {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
+        </button>
       </div>
-      <button
-        className="verify-button"
-        onClick={handleVerifyOtp}
-        disabled={isLoading || otp.length !== 6}
-      >
-        {isLoading ? "Verifying..." : "Verify"}
-      </button>
-      <button
-        className="resend-button"
-        onClick={handleResendOTP}
-        disabled={timer > 0}
-      >
-        {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
-      </button>
-      <div className="otp-toast-wrapper">
-        <ToastContainer autoClose={3000} />
-      </div>
-    </div>
+
+      {/* Loader Popup */}
+      {isLoading && (
+        <div className="loader-overlay">
+          <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "20vh" }}>
+            <CircularProgress color="success" />
+            <p style={{ marginTop: "20px" }}>Loading... Please wait</p>
+          </Box>
+        </div>
+      )}
     </div>
   );
 };
