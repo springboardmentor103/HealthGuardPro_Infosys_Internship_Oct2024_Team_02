@@ -126,23 +126,24 @@ HealthGuard Pro is a health tracking application that allows users to sign up, l
 
 ### Health Tracking
 
-- **Endpoint**: `/api/health/tracking`
+- **Endpoint**: `/api/quiz`
 - **Method**: POST
 - **Description**: Records user's health metrics
 - **Request Body**:
     ```json
     {
         "userId": "user123",
-        "heartRate": 75,
-        "bloodPressure": "120/80",
-        "temperature": 98.6,
+        "PhysicalFitness": 75,
+        "Nutrition": 56,
+        "MentalWellness": 81,
+        "BioMarkers": 96,
         "timestamp": "2024-02-20T10:00:00Z"
     }
     ```
 
 ### Health History
 
-- **Endpoint**: `/api/health/history`
+- **Endpoint**: `/api/scorehistory`
 - **Method**: GET
 - **Description**: Retrieves user's health history
 - **Query Parameters**: `userId`, `startDate`, `endDate`
@@ -179,15 +180,10 @@ HealthGuard Pro is a health tracking application that allows users to sign up, l
 - **File**: `frontend/src/pages/dashboard.js`
 - **Description**: Main dashboard showing health metrics and graphs
 
-### Health Metrics Form
+### Health Dashboard
 
-- **File**: `frontend/src/components/healthMetricsForm.js`
-- **Description**: Form for entering health measurements
-
-### Health History View
-
-- **File**: `frontend/src/components/healthHistory.js`
-- **Description**: Component for viewing historical health data
+- **File**: `frontend/src/pages/leaderboard.js`
+- **Description**: A dynamic leaderboard displaying real-time user performance from health assessments
 
 ## Styling
 
@@ -201,9 +197,8 @@ The application uses CSS for styling. The styles are organized in the `frontend/
 - **OTP Verification Page Styles**: `frontend/src/styles/otpverification.css`
 - **Reset Password Page Styles**: `frontend/src/styles/resetpassword.css`
 - **Dashboard Styles**: `frontend/src/styles/dashboard.css`
-- **Health Metrics Styles**: `frontend/src/styles/healthMetrics.css`
-- **Charts Styles**: `frontend/src/styles/charts.css`
-
+- **LeaderBoard Styles**: `frontend/src/styles/leaderboard.css`
+  
 ## Testing
 
 The project uses Jest and React Testing Library for testing.
