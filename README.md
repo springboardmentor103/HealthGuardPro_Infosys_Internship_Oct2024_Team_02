@@ -136,6 +136,7 @@ HealthGuard Pro is a health tracking application that allows users to sign up, l
         "PhysicalFitness": 75,
         "Nutrition": 56,
         "MentalWellness": 81,
+        "LifeStyle" : 79,
         "BioMarkers": 96,
         "timestamp": "2024-02-20T10:00:00Z"
     }
