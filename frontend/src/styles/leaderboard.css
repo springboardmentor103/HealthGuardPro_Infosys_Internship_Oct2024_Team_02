@@ -1,0 +1,492 @@
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #ffffff;
+}
+
+.leaderboard-container {
+  color: black;
+  text-align: center;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 45px 55px 35px 45px;
+  background-color: #fff;
+  border-bottom: none;
+}
+
+.logo {
+  font-size: 2rem;
+  margin: 0;
+  flex-shrink: 0; /* Prevents shrinking on small screens */
+}
+
+.logo:hover {
+  color: #4caf50;
+  cursor: pointer;
+}
+.nav-menu {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap; /* Adjusts menu items to new lines if needed */
+}
+
+.nav-button {
+  font-size: 1.3rem;
+  padding: 0.5rem 1rem;
+
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0 0.5rem;
+  transition: all 0.3s ease;
+}
+.nav-button:hover {
+  color: #4caf50;
+}
+
+.logut-button {
+  background: #4caf50;
+  color: white;
+  border: 2px solid white;
+  border-radius: 25px;
+  width: 100px;
+  font-size: medium;
+  cursor: pointer;
+}
+
+/* Hamburger Icon for Mobile */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+}
+.close-ham {
+  display: none;
+}
+
+.hamburger div {
+  height: 5px;
+
+  border-radius: 5px;
+}
+
+/* Navbar Menu for Mobile */
+.nav-menu {
+  display: flex;
+}
+
+.nav-menu.active {
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+/* Top Section */
+.top-section {
+  position: relative;
+  padding: 0 6%; /* Added padding for smaller screens */
+}
+
+.background-image {
+  border-radius: 50px;
+  padding-top: 2%;
+  display: block;
+  width: 100%;
+  height: -10%;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0) 70%
+  );
+}
+
+.top-user {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.top-profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #4caf50;
+}
+
+.top-name {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.top-rank {
+  font-size: 2rem;
+  margin: 0.2rem 0 0;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Leaderboard List */
+.leaderboard-list {
+  margin: 2rem auto;
+  max-width: 1200px;
+  background: white;
+  padding: 1rem;
+}
+
+.list-header,
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  padding: 1rem 0;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.list-item {
+  padding-right: 0.8rem;
+}
+
+.user-info {
+  display: flex;
+  /* align-items: center; */
+}
+
+.list-profile-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  border: 2.5px solid #4caf50;
+}
+.user-score {
+  font-size: 1.6rem;
+  color: #4caf50 !important;
+}
+.user-name {
+  font-size: 1.6rem;
+  margin-top: 1.25rem;
+}
+
+.user-rank {
+  font-size: 1.6rem;
+  color: #4caf50;
+}
+
+/* Blur Overlay */
+.blur-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0) 15%
+  );
+  pointer-events: none;
+}
+
+.Toastify__toast-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+}
+
+.Toastify__toast {
+  position: absolute;
+  top: 50% !important;
+  left: 250% !important;
+  transform: translate(-50%, -50%) !important;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 335px;
+  text-align: center;
+  z-index: 9999;
+}
+
+.toast-popup {
+  background-color: #ffffff;
+  padding: 30px;
+  width: 220px;
+  text-align: center;
+  justify-items: center;
+}
+
+.toast-popup p {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  white-space: nowrap;
+  padding-left: 90px;
+  color: #333;
+}
+
+.toast-popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+  padding-left: 90px;
+}
+
+.toast-popup .confirm-button {
+  padding: 8px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.toast-popup .confirm-button:hover {
+  background-color: #45a049;
+}
+
+.toast-popup .cancel-button {
+  padding: 8px 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.toast-popup .cancel-button:hover {
+  background-color: #e53935;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: row;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .hamburger {
+    display: flex;
+    flex-direction: col;
+    justify-content: space-around;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+
+  .close-ham {
+    display: flex;
+    color: red;
+    background: transparent;
+    border: 1px solid white;
+    padding: 8px;
+  }
+  .hamburger div {
+    width: 25px;
+    height: 3px;
+
+    border-radius: 10px;
+  }
+  .background-image {
+    border-radius: 18px;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: #fff;
+    transform: translateX(100%);
+
+    z-index: 9999; /* Ensure the menu stays on top */
+    overflow-y: auto; /* Prevent overflow issues */
+  }
+
+  .nav-menu.active {
+    transform: translateX(0);
+  }
+  .close-ham.on {
+    transform: translate(80%);
+  }
+
+  .user-rank {
+    font-size: 1.3rem;
+    color: #4caf50;
+  }
+
+  .leaderboard-list {
+    width: 90%;
+  }
+
+  .list-header,
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+  }
+
+  .list-header {
+    padding-left: 2rem;
+  }
+
+  .list-item {
+    padding-right: 0.8rem;
+  }
+
+  .list-header{
+    padding-left:2rem;
+  }
+
+  .list-item{
+    padding-right:0.8rem;
+  }
+  
+  .user-info {
+    font-size: 1rem;
+    gap: 0.3rem;
+  }
+
+  .user-name {
+    padding-top: 15px;
+    font-size: 1.2rem;
+  }
+
+  .list-profile-image {
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .nav-button {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .top-profile-image {
+    width: 80px;
+    height: 80px;
+  }
+  .user-rank {
+    font-size: 1.3rem;
+    color: #4caf50;
+  }
+  .user-name {
+    padding-top: 15px;
+    font-size: 1.2rem;
+  }
+
+  .user-info {
+    text-align: center;
+  }
+}
+
+/* Styles for the dropdown to make it look uniform with other elements */
+.metric-dropdown {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1em;
+  padding-right: 2rem;
+}
+
+.metric-dropdown:focus {
+  outline: none;
+  border: none;
+}
+
+.metric-dropdown option {
+  font-size: 1rem;
+  background-color: white;
+  color: black;
+  font-weight: normal;
+}
+
+/* Styles for the score heading and score elements */
+.list-header h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.user-score {
+  font-size: 1.6rem;
+  color: #4caf50;
+}
+
+/* Ensure score, leaderboard score, and rank are in one straight line */
+.list-header,
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+/* Add styles to make the rank a pill shape */
+.pill-rank {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+}
