@@ -97,7 +97,6 @@ function Signup() {
   return (
     <div className="login-card">
     <div className="signup-container">
-      <ToastContainer position="top-center" />
       <div className="login-box">
         <h1>
           Create your <span>HealthGuard Pro</span> account
