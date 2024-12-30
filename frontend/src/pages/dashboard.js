@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext,useCallback } from "react";
+import React, { useState, useEffect, useMemo, useContext, useCallback } from "react";
 import { ToastContainer, toast } from "react-toastify";  // Keep this import
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -44,7 +44,7 @@ const Dashboard = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (response.status === 200) {
         const { quizScores, imageUrl, scoreHistory } = response.data;
 
@@ -69,7 +69,7 @@ const Dashboard = () => {
       toast.error("Error loading dashboard data. Please try again.");
     }
   }, [userId, token]); // Dependencies for useCallback
-  
+
 
   useEffect(() => {
     fetchDashboardData();
@@ -98,11 +98,11 @@ const Dashboard = () => {
     { title: "Bio Markers", description: "Health Indicators", route: "/biomarkersquiz", colSpan: true },
     { title: "Overall Score", description: "Combined Results", isBottom: true, colSpan: true },
   ], []);
-  
 
 
 
- const handleViewBoard = (index) => {
+
+  const handleViewBoard = (index) => {
     if (currentView === index) {
       // Close view and reset current data
       setCurrentView(null);
@@ -120,13 +120,13 @@ const Dashboard = () => {
       });
     }
   };
-  
+
 
   const renderScoreHistory = () => {
     if (scoreHistory.length < 2) return null; // Don't display if history has less than 2 entries
 
-    const displayedHistory = 
-    scoreHistory.length === 5 ? scoreHistory.slice(1, 5) : scoreHistory.slice(1);// Reverse the entire history
+    const displayedHistory =
+      scoreHistory.length === 5 ? scoreHistory.slice(1, 5) : scoreHistory.slice(1);// Reverse the entire history
 
     return (
       <div>
@@ -141,26 +141,26 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-          {displayedHistory.map((item, displayIndex) => {
-            // Map the displayed index to the actual index in scoreHistory
-            const actualIndex = displayIndex + 1;
+            {displayedHistory.map((item, displayIndex) => {
+              // Map the displayed index to the actual index in scoreHistory
+              const actualIndex = displayIndex + 1;
 
-            return (
-              <tr key={actualIndex}>
-                <td>{displayIndex + 1}</td>
-                <td>{formatDate(item.timestamp)}</td>
-                <td>{Math.round(item.scores.overallScore)}%</td>
-                <td>
-                  <button
-                    className="view-button"
-                    onClick={() => handleViewBoard(actualIndex)}
-                  >
-                    {currentView === actualIndex ? "Close" : "View"}
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+              return (
+                <tr key={actualIndex}>
+                  <td>{displayIndex + 1}</td>
+                  <td>{formatDate(item.timestamp)}</td>
+                  <td>{Math.round(item.scores.overallScore)}%</td>
+                  <td>
+                    <button
+                      className="view-button"
+                      onClick={() => handleViewBoard(actualIndex)}
+                    >
+                      {currentView === actualIndex ? "Close" : "View"}
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -168,65 +168,65 @@ const Dashboard = () => {
   };
 
 
-const handleImageChange = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  setLoading(true);
-  const data = new FormData();
-  data.append("file", file);
-  data.append("upload_preset", "healthguard_pro");
-
-  try {
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to upload the image.");
-    }
-
-    const uploadedImage = await res.json();
-    const imageUrl = uploadedImage.secure_url;
-
-
-    // Send imageUrl to backend
-    const payload = {
-      userId,
-      imageUrl,
-    };
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    const response = await axios.post(endpoints.uploadImage, payload, config);
-
-    if (response.status === 200) {
-      toast.success("Profile image updated successfully!");
-      setProfileImage(imageUrl);
-      // setShowOptions(false);
-    } else {
-      throw new Error("Failed to send image URL to backend.");
-    }
-  } catch (error) {
-    console.error("Error:", error.message);
-    toast.error("Image upload or update failed. Please try again.");
-  }finally {
-    setLoading(false); // Stop the loader
-    setShowOptions(false);
-  }
-};
-
-  const handleDeleteImage = async() => {
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
     setLoading(true);
-    try{
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "healthguard_pro");
+
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/ddfwslkx0/image/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to upload the image.");
+      }
+
+      const uploadedImage = await res.json();
+      const imageUrl = uploadedImage.secure_url;
+
+
+      // Send imageUrl to backend
+      const payload = {
+        userId,
+        imageUrl,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await axios.post(endpoints.uploadImage, payload, config);
+
+      if (response.status === 200) {
+        toast.success("Profile image updated successfully!");
+        setProfileImage(imageUrl);
+        // setShowOptions(false);
+      } else {
+        throw new Error("Failed to send image URL to backend.");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error("Image upload or update failed. Please try again.");
+    } finally {
+      setLoading(false); // Stop the loader
+      setShowOptions(false);
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    setLoading(true);
+    try {
       const imageUrl = defaultImage;
       const payload = {
         userId,
@@ -251,7 +251,7 @@ const handleImageChange = async (event) => {
     } catch (error) {
       console.error("Error:", error.message);
       toast.error("Image upload or update failed. Please try again.");
-    }finally {
+    } finally {
       setLoading(false); // Stop the loader
       setShowOptions(false);
     }
@@ -292,8 +292,8 @@ const handleImageChange = async (event) => {
       }
     );
   };
-  
-  
+
+
   const handleCardClick = (route, title) => {
     if (title === "Overall Score") {
       console.log("No action for Overall Score card");
@@ -316,9 +316,9 @@ const handleImageChange = async (event) => {
         ...prevScores,
         [category]: parseInt(savedScore, 10),
       }));
-      
 
-      
+
+
 
     }
   };
@@ -354,7 +354,7 @@ const handleImageChange = async (event) => {
     });
   }, [data]);
 
-return (
+  return (
     <div className="dashboard">
       {loading && (
         <div className="loader-overlay">
@@ -396,9 +396,15 @@ return (
               <button onClick={() => document.getElementById("file-input").click()} className="profile-option-btn">
                 Update
               </button>
-              <button onClick={handleDeleteImage} className="profile-option-btn">
-                Delete
-              </button>
+              {profileImage !== defaultImage && (
+                <button
+                  className="profile-option-btn"
+                  onClick={handleDeleteImage}
+                  disabled={loading}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           )}
           <div className="profile-name-badge">
@@ -431,11 +437,10 @@ return (
             <p>{item.description}</p>
             <div className="progress-bar">
               <div
-                className={`progress ${
-                  (item.title === "Overall Score" ? overallScore : scores[item.title]) === 100
-                    ? "curved-end"
-                    : ""
-                }`}
+                className={`progress ${(item.title === "Overall Score" ? overallScore : scores[item.title]) === 100
+                  ? "curved-end"
+                  : ""
+                  }`}
                 style={{
                   width: `${item.title === "Overall Score" ? overallScore : scores[item.title] || 0}%`,
                 }}
@@ -445,7 +450,7 @@ return (
         ))}
       </div>
 
-       {renderScoreHistory()}
+      {renderScoreHistory()}
 
       <ToastContainer />
     </div>
