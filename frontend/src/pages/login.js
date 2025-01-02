@@ -67,6 +67,9 @@ function LoginPage() {
   return (
 <div className="login-card">
   <div className="login-container">
+    <div className="toast-wrapper">
+      <ToastContainer autoClose={3000} />
+    </div>
     <div className="login-box">
       <h1>Welcome to <span>HealthGuard Pro</span></h1>
       <p>Log In to get started</p>
@@ -98,10 +101,6 @@ function LoginPage() {
         Don't have an account? <Link to="/signup">Sign Up</Link>
       </p>
     </div>
-    <div className="login-toast-wrapper">
-        <ToastContainer autoClose={3000} />
-      </div>
-
   </div>
 </div>
 
