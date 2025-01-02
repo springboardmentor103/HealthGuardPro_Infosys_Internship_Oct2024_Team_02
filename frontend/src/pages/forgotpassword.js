@@ -46,6 +46,9 @@ const ForgotPassword = () => {
   return (
     <div className="forgot-card">
       <div className="forgot-container">
+        <div className="toast-wrapper">
+          <ToastContainer autoClose={3000} />
+        </div>
         <h1 className="heading">HealthGuard Pro</h1>
         <h2 className="forgot-password">Forgot Password</h2>
         <p className="enter">Enter your registered email address</p>
@@ -65,9 +68,6 @@ const ForgotPassword = () => {
         >
           Send OTP
         </button>
-        <div className="forgot-toast-wrapper">
-          <ToastContainer autoClose={3000} />
-        </div>
       </div>
     </div>
   );
