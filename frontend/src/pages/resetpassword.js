@@ -71,17 +71,9 @@ const ResetPassword = () => {
   return (
     <div className="reset-card">
       <div className="reset-container">
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+        <div className="reset-toast-wrapper">
+          <ToastContainer autoClose={3000} />
+        </div>
         <h1 className="heading">HealthGuard Pro</h1>
         <h2 className="reset-password">Reset Password</h2>
         <p className="enter">Please enter your new password</p>

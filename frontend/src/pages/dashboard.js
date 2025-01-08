@@ -287,6 +287,7 @@ const handleImageChange = async (event) => {
         </div>
       ),
       {
+        containerId: "logoutContainer",
         duration: 9000,
         position: "top-center",
       }
@@ -447,7 +448,11 @@ return (
 
        {renderScoreHistory()}
 
-      <ToastContainer />
+      <div className="toast-wrapper">
+        <ToastContainer />
+      </div>
+
+      <ToastContainer containerId="logoutContainer" />
     </div>
   );
 };

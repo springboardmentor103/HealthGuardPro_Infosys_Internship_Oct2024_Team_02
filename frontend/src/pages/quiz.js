@@ -153,7 +153,9 @@ function QuizPage() {
           ></div>
         </div>
       </div>
-
+      <div className="toast-wrapper">
+        <ToastContainer autoClose={3000} />
+      </div>
       {showPopup && (
         <div className="congratulations-popup">
           <div className="popup-content">
@@ -164,7 +166,6 @@ function QuizPage() {
         </div>
       )}
 
-      <ToastContainer />
     </div>
   );
 }

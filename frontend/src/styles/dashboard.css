@@ -27,9 +27,6 @@ body {
   color: #333;
 }
 
-.navbar a:hover {
-  color: #4caf50; 
-}
 
 .navbar .logo {
   text-decoration: none;
